@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { SplitterModule } from 'primeng/splitter';
 import { StyleClassModule } from 'primeng/styleclass';
 import { ToolbarModule } from 'primeng/toolbar';
 import { AppComponent } from './app.component';
@@ -26,7 +27,8 @@ import { SimulationComponent } from './shared/simulation/simulation.component';
         SplitButtonModule,
         InputTextModule,
         BrowserAnimationsModule,
-        StyleClassModule
+        StyleClassModule,
+        SplitterModule
     ],
     providers: [],
     bootstrap: [AppComponent],

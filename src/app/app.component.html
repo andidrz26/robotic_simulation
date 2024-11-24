@@ -1,9 +1,13 @@
 <app-header></app-header>
-<div class="row">
-    <div class="col-md-4 ui-height">
-        <app-create-object></app-create-object>
-    </div>
-    <div class="col-md-8 ui-height">
-        <app-simulation></app-simulation>
-    </div>
-</div>
+<p-splitter [panelSizes]="[25, 75]" [style]="{ height: 'calc(100vh - 94px)'}">
+    <ng-template pTemplate>
+        <div class="col flex align-items-center justify-content-center">
+            <app-create-object></app-create-object>
+        </div>
+    </ng-template>
+    <ng-template pTemplate>
+        <div class="col flex align-items-center justify-content-center">
+            <app-simulation></app-simulation>
+        </div>
+    </ng-template>
+</p-splitter>
