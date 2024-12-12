@@ -11,13 +11,11 @@ pub fn product_of(
     {
         let mut product: Vec<Vec<f64>> = Vec::new();
 
-        let mut i: usize = 0;
         let col_length_of_first_factor: usize = first_factor.len();
         let row_length_of_second_factor: usize = second_factor[0].len();
-        while i < col_length_of_first_factor {
-            let mut j: usize = 0;
+        for i in 0..col_length_of_first_factor {
             product.push(Vec::new());
-            while j < row_length_of_second_factor {
+            for j in 0.. row_length_of_second_factor {
                 let vector_of_second_factor: Vec<f64> = second_factor
                     .iter()
                     .filter_map(|row| row.get(j))
@@ -30,9 +28,7 @@ pub fn product_of(
                     Some(result) => product[i].push(result),
                     None => println!("Fehler"),
                 }
-                j += 1;
             }
-            i += 1;
         }
         Some(product)
     } else {

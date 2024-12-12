@@ -1,12 +1,9 @@
 pub fn scalar_product_of(first_factor: &Vec<f64>, second_factor: Vec<f64>) -> Option<f64> {
     if first_factor.len() == second_factor.len() {
         let mut product: f64 = 0.0;
-
-        let mut i: usize = 0;
         let length: usize = first_factor.len();
-        while i < length {
+        for i in 0..length {
             product += first_factor[i] * second_factor[i];
-            i += 1;
         }
         Some(product)
     } else {
