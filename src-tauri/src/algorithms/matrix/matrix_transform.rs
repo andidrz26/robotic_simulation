@@ -1,20 +1,3 @@
-pub fn transpose(matrix: Vec<Vec<f64>>) -> Option<Vec<Vec<f64>>> {
-    let rows: usize = matrix.len();
-    let cols: usize = matrix[0].len();
-
-    if rows != 0 && cols != 0 && rows == cols {
-        let mut transposed_matrix: Vec<Vec<f64>> = vec![vec![0.0, rows as f64]; cols];
-        for i in 0..rows {
-            for j in 0..cols {
-                transposed_matrix[j][i] = matrix[i][j];
-            }
-        }
-        Some(transposed_matrix)
-    } else {
-        None
-    }
-}
-
 fn determinant_3x3(matrix: [[f64; 3]; 3]) -> f64 {
     matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1])
         - matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0])
@@ -61,6 +44,23 @@ fn cofactor_matrix(matrix: [[f64; 4]; 4]) -> [[f64; 4]; 4] {
         }
     }
     cofactor
+}
+
+pub fn transpose(matrix: Vec<Vec<f64>>) -> Option<Vec<Vec<f64>>> {
+    let rows: usize = matrix.len();
+    let cols: usize = matrix[0].len();
+
+    if rows != 0 && cols != 0 && rows == cols {
+        let mut transposed_matrix: Vec<Vec<f64>> = vec![vec![0.0, rows as f64]; cols];
+        for i in 0..rows {
+            for j in 0..cols {
+                transposed_matrix[j][i] = matrix[i][j];
+            }
+        }
+        Some(transposed_matrix)
+    } else {
+        None
+    }
 }
 
 pub fn invert_4x4(matrix: [[f64; 4]; 4]) -> Option<[[f64; 4]; 4]> {

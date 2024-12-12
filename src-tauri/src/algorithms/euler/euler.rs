@@ -11,7 +11,7 @@ impl EulerAngles {
         Self { yaw, pitch, roll }
     }
 
-    pub fn calculate_angles(rotation_matrix: [[f64; 3]; 3]) -> Self {
+    pub fn from_rotation_matrix(rotation_matrix: [[f64; 3]; 3]) -> Self {
         if rotation_matrix[2][2] > 1.0 - EPSILON {
             Self {
                 yaw: f64::atan2(rotation_matrix[0][1], rotation_matrix[0][0]),
@@ -56,7 +56,7 @@ impl EulerAngles {
         [[r11, r12, r13], [r21, r22, r23], [r31, r32, r33]]
     }
 
-    fn all_filled(&self) -> bool {
+    pub fn all_filled(&self) -> bool {
         !self.yaw.is_nan() && !self.pitch.is_nan() && !self.roll.is_nan()
     }
 }
