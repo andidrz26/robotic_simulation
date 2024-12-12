@@ -1,3 +1,5 @@
+use std::f64::{consts::PI, EPSILON};
+
 pub struct EulerAngles {
     yaw: f64,
     pitch: f64,
@@ -12,11 +14,29 @@ impl EulerAngles {
 
 pub fn calculate_angles(rotation_matrix: Vec<Vec<f64>>) -> Option<EulerAngles> {
     if rotation_matrix.len() == 3 && rotation_matrix[0].len() == 3 {
-        let angles: EulerAngles = EulerAngles {
-            yaw: f64::atan2(rotation_matrix[1][0], rotation_matrix[0][0]),
-            pitch: f64::atan2(rotation_matrix[2][0].sqrt().powf(2.0), rotation_matrix[2][2]),
-            roll: f64::atan2(rotation_matrix[2][1], rotation_matrix[2][2]),
-        };
+        let angles: EulerAngles;
+        if rotation_matrix[2][2] > 1.0 - EPSILON {
+            angles = EulerAngles {
+                yaw: f64::atan2(rotation_matrix[0][1], rotation_matrix[0][0]),
+                pitch: 0.0,
+                roll: 0.0,
+            };
+        } else if rotation_matrix[2][2] < -1.0 + EPSILON {
+            angles = EulerAngles {
+                yaw: f64::atan2(rotation_matrix[1][0], rotation_matrix[0][0]),
+                pitch: PI,
+                roll: 0.0,
+            };
+        } else {
+            angles = EulerAngles {
+                yaw: f64::atan2(rotation_matrix[1][0], rotation_matrix[0][0]),
+                pitch: f64::atan2(
+                    rotation_matrix[2][0].sqrt().powf(2.0),
+                    rotation_matrix[2][2],
+                ),
+                roll: f64::atan2(rotation_matrix[2][1], rotation_matrix[2][2]),
+            };
+        }
         if angles.all_filled() {
             Some(angles)
         } else {

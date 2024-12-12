@@ -1,5 +1,3 @@
-use std::f64;
-
 pub fn transpose(matrix: Vec<Vec<f64>>) -> Option<Vec<Vec<f64>>> {
     let rows: usize = matrix.len();
     let cols: usize = matrix[0].len();
