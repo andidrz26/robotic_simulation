@@ -1,4 +1,4 @@
-pub fn sum_of(first_summand: Vec<Vec<f64>>, second_summand: Vec<Vec<f64>>) -> Option<Vec<Vec<f64>>> {
+pub fn sum_of(first_summand: Vec<Vec<f64>>, second_summand: Vec<Vec<f64>>) -> Result<Vec<Vec<f64>>, std::io::Error> {
     if first_summand.len() == second_summand.len()
         && first_summand.len() > 0
         && first_summand[0].len() == second_summand[0].len()
@@ -12,8 +12,8 @@ pub fn sum_of(first_summand: Vec<Vec<f64>>, second_summand: Vec<Vec<f64>>) -> Op
                 sum[i].push(first_summand[i][j] + second_summand[i][j]);
             }
         }
-        Some(sum)
+        Ok(sum)
     } else {
-        None
+        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Input data not valid"))
     }
 }
