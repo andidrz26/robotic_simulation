@@ -1,3 +1,4 @@
+#[derive(serde::Serialize, serde::Deserialize, Debug, PartialEq, Default)]
 pub struct Quaternion {
     scalar: f64,
     vector_x: f64,
@@ -6,43 +7,64 @@ pub struct Quaternion {
 }
 
 impl Quaternion {
-    fn add(&self, other: &Quaternion) -> Quaternion {
-        Quaternion {
-            scalar: self.scalar + other.scalar,
-            vector_x: self.vector_x + other.vector_x,
-            vector_y: self.vector_y + other.vector_y,
-            vector_z: self.vector_z + other.vector_z,
-        }
-    }
-
-    fn multiply(&self, other: &Quaternion) -> Quaternion {
-        Quaternion {
-            scalar: self.scalar * other.scalar - self.vector_x * other.vector_x - self.vector_y * other.vector_y - self.vector_z * other.vector_z,
-            vector_x: self.scalar * other.vector_x + self.vector_x * other.scalar + self.vector_y * other.vector_z - self.vector_z * other.vector_y,
-            vector_z: self.scalar * other.vector_z + self.vector_x * other.vector_y - self.vector_y * other.vector_x + self.vector_z * other.scalar,
-            vector_y: self.scalar * other.vector_y - self.vector_x * other.vector_z + self.vector_y * other.scalar + self.vector_z * other.vector_x,
-        }
+    pub fn new(scalar: f64, vector_x: f64, vector_y: f64, vector_z: f64) -> Result<Quaternion, std::io::Error> {
+        Ok(Quaternion {
+            scalar,
+            vector_x,
+            vector_y,
+            vector_z,
+        })
     }
 
     fn all_filled(&self) -> bool {
-        !self.scalar.is_nan() && !self.vector_x.is_nan() && !self.vector_y.is_nan() && !self.vector_z.is_nan()
+        *self != Quaternion::default() 
+    }
+
+    pub fn sum_of(&self, second_summand: Quaternion) -> Result<Quaternion, std::io::Error> {
+        let sum: Quaternion = add(self, &second_summand);
+        if sum.all_filled() {
+            Ok(sum)
+        } else {
+            Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"))
+        }
+    }
+
+    pub fn product_of(&self, second_factor: Quaternion) -> Result<Quaternion, std::io::Error> {
+        let product: Quaternion = multiply(self, &second_factor);
+        if product.all_filled() {
+            Ok(product)
+        } else {
+            Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"))
+        }
     }
 }
 
-pub fn sum_of(first_summand: Quaternion, second_summand: Quaternion) -> Option<Quaternion> {
-    let sum: Quaternion = first_summand.add(&second_summand);
-    if sum.all_filled() {
-        Some(sum)
-    } else {
-        None
+fn add(first_quaternion: &Quaternion, second_quaternion: &Quaternion) -> Quaternion {
+    Quaternion {
+        scalar: first_quaternion.scalar + second_quaternion.scalar,
+        vector_x: first_quaternion.vector_x + second_quaternion.vector_x,
+        vector_y: first_quaternion.vector_y + second_quaternion.vector_y,
+        vector_z: first_quaternion.vector_z + second_quaternion.vector_z,
     }
 }
 
-pub fn product_of(first_factor: Quaternion, second_factor: Quaternion) -> Option<Quaternion> {
-    let product: Quaternion = first_factor.multiply(&second_factor);
-    if product.all_filled() {
-        Some(product)
-    } else {
-        None
+fn multiply(first_quaternion: &Quaternion, second_quaternion: &Quaternion) -> Quaternion {
+    Quaternion {
+        scalar: first_quaternion.scalar * second_quaternion.scalar
+            - first_quaternion.vector_x * second_quaternion.vector_x
+            - first_quaternion.vector_y * second_quaternion.vector_y
+            - first_quaternion.vector_z * second_quaternion.vector_z,
+        vector_x: first_quaternion.scalar * second_quaternion.vector_x
+            + first_quaternion.vector_x * second_quaternion.scalar
+            + first_quaternion.vector_y * second_quaternion.vector_z
+            - first_quaternion.vector_z * second_quaternion.vector_y,
+        vector_z: first_quaternion.scalar * second_quaternion.vector_z
+            + first_quaternion.vector_x * second_quaternion.vector_y
+            - first_quaternion.vector_y * second_quaternion.vector_x
+            + first_quaternion.vector_z * second_quaternion.scalar,
+        vector_y: first_quaternion.scalar * second_quaternion.vector_y
+            - first_quaternion.vector_x * second_quaternion.vector_z
+            + first_quaternion.vector_y * second_quaternion.scalar
+            + first_quaternion.vector_z * second_quaternion.vector_x,
     }
 }

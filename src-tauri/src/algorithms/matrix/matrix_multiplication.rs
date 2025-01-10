@@ -1,5 +1,4 @@
-#[path = "../vector/vector_multiplication.rs"]
-mod vector_multiplication;
+use crate::algorithms::vector::vector_multiplication;
 
 pub fn product_of(
     first_factor: Vec<Vec<f64>>,
@@ -32,6 +31,6 @@ pub fn product_of(
         }
         Ok(product)
     } else {
-        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Input data not valid"))
+        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"))
     }
 }

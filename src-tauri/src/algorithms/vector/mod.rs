@@ -1,4 +1,4 @@
-mod vector_multiplication;
+pub(crate) mod vector_multiplication;
 mod vector_addition;
 
 pub use vector_addition::sum_of;

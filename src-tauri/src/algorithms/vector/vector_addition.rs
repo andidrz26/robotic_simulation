@@ -8,6 +8,6 @@ pub fn sum_of(first_summand: Vec<f64>, second_summand: Vec<f64>) -> Result<Vec<f
         }
         Ok(sum)
     } else {
-        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Input data not valid"))
+        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"))
     }
 }

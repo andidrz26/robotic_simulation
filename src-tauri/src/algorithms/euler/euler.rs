@@ -1,10 +1,12 @@
 use std::f64::{consts::PI, EPSILON};
 
+#[derive(Debug, Default, PartialEq)]
 pub struct EulerAngles {
     yaw: f64,
     pitch: f64,
     roll: f64,
 }
+
 
 impl EulerAngles {
     pub fn new(yaw: f64, pitch: f64, roll: f64) -> Self {
@@ -57,6 +59,6 @@ impl EulerAngles {
     }
 
     pub fn all_filled(&self) -> bool {
-        !self.yaw.is_nan() && !self.pitch.is_nan() && !self.roll.is_nan()
+        *self != EulerAngles::default()
     }
 }

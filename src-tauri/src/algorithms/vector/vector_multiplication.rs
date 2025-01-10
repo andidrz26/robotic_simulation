@@ -7,7 +7,7 @@ pub fn scalar_product_of(first_factor: &Vec<f64>, second_factor: Vec<f64>) -> Re
         }
         Ok(product)
     } else {
-        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Input data not valid"))
+        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"))
     }
 }
 
@@ -22,6 +22,6 @@ pub fn cross_product_of(first_factor: [f64; 3], second_factor: [f64; 3]) -> Resu
         product[2] = first_factor[0] * second_factor[1] - first_factor[1] * second_factor[0];
         Ok(product)
     } else {
-        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Input data not valid"))
+        Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"))
     }
 }
