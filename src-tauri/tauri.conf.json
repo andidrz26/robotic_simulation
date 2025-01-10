@@ -5,7 +5,7 @@
   "identifier": "com.robotic_simulation.app",
   "build": {
     "beforeDevCommand": "ng serve",
-    "devUrl": "http://localhost:1420",
+    "devUrl": "http://localhost:4200",
     "beforeBuildCommand": "ng build",
     "frontendDist": "../dist/robotic_simulation/browser"
   },

@@ -1,3 +1,3 @@
 mod euler;
 
-pub use euler::calculate_angles;
+pub use euler::EulerAngles;

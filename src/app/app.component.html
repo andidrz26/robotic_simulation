@@ -1,13 +1,9 @@
-<main class="container">
-  <h1>Welcome to Tauri + Angular!</h1>
-
-  <div class="row">
-    <a href="https://tauri.app" target="_blank">
-      <img src="/assets/tauri.svg" class="logo tauri" alt="Tauri logo" />
-    </a>
-    <a href="https://angular.io" target="_blank">
-      <img src="/assets/angular.svg" class="logo angular" alt="Angular logo" />
-    </a>
-  </div>
-  <p>Click on the logos to learn more about the frameworks</p>
-</main>
+<app-header></app-header>
+<div class="row">
+    <div class="col-md-4 ui-height">
+        <app-create-object></app-create-object>
+    </div>
+    <div class="col-md-8 ui-height">
+        <app-simulation></app-simulation>
+    </div>
+</div>
