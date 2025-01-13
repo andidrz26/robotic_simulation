@@ -1,10 +1,19 @@
 use std::f64::{consts::PI, EPSILON};
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct EulerAngles {
-    yaw: f64,
-    pitch: f64,
-    roll: f64,
+        #[cfg(test)]
+        pub yaw: f64,
+        #[cfg(test)]
+        pub pitch: f64,
+        #[cfg(test)]
+        pub roll: f64,
+        #[cfg(not(test))]
+        yaw: f64,
+        #[cfg(not(test))]
+        pitch: f64,
+        #[cfg(not(test))]
+        roll: f64,
 }
 
 

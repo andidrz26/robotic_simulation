@@ -102,6 +102,27 @@ fn get_multiplied_quaternion(
     }
 }
 
+#[tauri::command(async, rename_all = "snake_case")]
+fn get_new_eulerangles() -> Result<algorithms::euler::EulerAngles, Error> {
+    Ok(algorithms::euler::EulerAngles::new(1.0, 2.0, 3.0))
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
+fn get_from_rotation_matrix_eulerangles(
+    rotation_matrix: [[f64; 3]; 3],
+) -> Result<algorithms::euler::EulerAngles, Error> {
+    Ok(algorithms::euler::EulerAngles::from_rotation_matrix(
+        rotation_matrix,
+    ))
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
+fn get_to_rotation_matrix_eulerangles(
+    euler_angles: algorithms::euler::EulerAngles,
+) -> Result<[[f64; 3]; 3], Error> {
+    Ok(euler_angles.to_rotation_matrix())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -115,6 +136,9 @@ pub fn run() {
             get_new_quaternion,
             get_added_quaternion,
             get_multiplied_quaternion,
+            get_new_eulerangles,
+            get_from_rotation_matrix_eulerangles,
+            get_to_rotation_matrix_eulerangles,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -123,6 +147,7 @@ pub fn run() {
 #[cfg(test)]
 mod tests {
     use crate::algorithms::{
+        euler::EulerAngles,
         matrix::{product_of, sum_of},
         quaternion::quaternion::Quaternion,
         vector,
@@ -298,5 +323,58 @@ mod tests {
                 assert!(true, "Error: {:?}", error);
             }
         }
+    }
+
+    fn initialize_yaw_pitch_roll() -> (f64, f64, f64) {
+        let yaw: f64 = 0.5;
+        let pitch: f64 = 0.2;
+        let roll: f64 = 0.3;
+        (yaw, pitch, roll)
+    }
+
+    #[test]
+    fn test_new_eulerangles() {
+        let (yaw, pitch, roll) = initialize_yaw_pitch_roll();
+        let eulerangles: EulerAngles = EulerAngles::new(yaw, pitch, roll);
+        assert!(true, "Eulerangles: {:?}", eulerangles);
+    }
+
+    #[test]
+    fn test_from_rotation_matrix() {
+        let rotation_matrix: [[f64; 3]; 3] = [
+            [
+                -0.11804512112857041,
+                0.39905330338932815,
+                -0.9092974268256817,
+            ],
+            [-0.91292828800873, -0.403872655832249, -0.05872664492762098],
+            [-0.39067542836885744, 0.8231909492487575, 0.411982245665683],
+        ];
+        let (yaw, pitch, roll) = initialize_yaw_pitch_roll();
+        let asserted_eulerangles: EulerAngles = EulerAngles::new(yaw, pitch, roll);
+        let eulerangles: EulerAngles = EulerAngles::from_rotation_matrix(rotation_matrix);
+        assert_eq!(asserted_eulerangles.yaw.round(), eulerangles.yaw.round());
+        assert_eq!(
+            asserted_eulerangles.pitch.round(),
+            eulerangles.pitch.round()
+        );
+        assert_eq!(asserted_eulerangles.roll.round(), eulerangles.roll.round());
+    }
+
+    #[test]
+    fn test_to_rotation_matrix() {
+        let (yaw, pitch, roll) = initialize_yaw_pitch_roll();
+        let eulerangles: EulerAngles = EulerAngles::new(yaw, pitch, roll);
+        let rotation_matrix: [[f64; 3]; 3] = EulerAngles::to_rotation_matrix(&eulerangles);
+        let asserted_rotation_matrix: [[f64; 3]; 3] = [
+            [0.8600893382050473, -0.40648913508618606, 0.308241647677416],
+            [0.4698689469495153, 0.8665341013181509, -0.1683503012925674],
+            [
+                -0.19866933079506122,
+                0.28962947762551555,
+                0.9362933635841992,
+            ],
+        ];
+        assert_eq!(asserted_rotation_matrix, rotation_matrix);
     }
 }
