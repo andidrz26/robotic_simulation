@@ -1,6 +1,3 @@
-@layer bootstrap, primeng;
-
-@import "bootstrap/dist/css/bootstrap.min.css" layer(bootstrap);
-@import "primeng/resources/themes/bootstrap4-dark-purple/theme.css" layer(primeng);
-@import "primeng/resources/primeng.min.css" layer(primeng);
-@import "primeicons/primeicons.css" layer(primeng);
+@layer bootstrap {
+  @import "bootstrap/dist/css/bootstrap.min.css";
+}

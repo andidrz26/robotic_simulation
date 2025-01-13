@@ -146,6 +146,8 @@ pub fn run() {
 
 #[cfg(test)]
 mod tests {
+    use std::f64::consts::PI;
+
     use crate::algorithms::{
         euler::EulerAngles,
         matrix::{product_of, sum_of},
@@ -326,9 +328,9 @@ mod tests {
     }
 
     fn initialize_yaw_pitch_roll() -> (f64, f64, f64) {
-        let yaw: f64 = 0.5;
-        let pitch: f64 = 0.2;
-        let roll: f64 = 0.3;
+        let yaw: f64 = PI / 3.0;
+        let pitch: f64 = PI / 2.0;
+        let roll: f64 = PI / 4.0;
         (yaw, pitch, roll)
     }
 
@@ -339,26 +341,30 @@ mod tests {
         assert!(true, "Eulerangles: {:?}", eulerangles);
     }
 
+    fn initialize_rotation_matrix() -> [[f64; 3]; 3] {
+        [
+            [
+                3.0616169978683836e-17,
+                0.25881904510252074,
+                0.9659258262890684,
+            ],
+            [
+                5.302876193624534e-17,
+                0.9659258262890684,
+                -0.25881904510252074,
+            ],
+            [-1.0, 4.329780281177467e-17, 4.329780281177467e-17],
+        ]
+    }
+
     #[test]
     fn test_from_rotation_matrix() {
-        let rotation_matrix: [[f64; 3]; 3] = [
-            [
-                -0.11804512112857041,
-                0.39905330338932815,
-                -0.9092974268256817,
-            ],
-            [-0.91292828800873, -0.403872655832249, -0.05872664492762098],
-            [-0.39067542836885744, 0.8231909492487575, 0.411982245665683],
-        ];
-        let (yaw, pitch, roll) = initialize_yaw_pitch_roll();
-        let asserted_eulerangles: EulerAngles = EulerAngles::new(yaw, pitch, roll);
+        let rotation_matrix: [[f64; 3]; 3] = initialize_rotation_matrix();
+        let asserted_eulerangles: EulerAngles =
+            EulerAngles::new(0.0, 1.5707963267948966, -0.26179938779914935);
         let eulerangles: EulerAngles = EulerAngles::from_rotation_matrix(rotation_matrix);
-        assert_eq!(asserted_eulerangles.yaw.round(), eulerangles.yaw.round());
-        assert_eq!(
-            asserted_eulerangles.pitch.round(),
-            eulerangles.pitch.round()
-        );
-        assert_eq!(asserted_eulerangles.roll.round(), eulerangles.roll.round());
+        assert_eq!(asserted_eulerangles, eulerangles);
+        println!("Eulerangles: {:?}", eulerangles);
     }
 
     #[test]
@@ -366,15 +372,7 @@ mod tests {
         let (yaw, pitch, roll) = initialize_yaw_pitch_roll();
         let eulerangles: EulerAngles = EulerAngles::new(yaw, pitch, roll);
         let rotation_matrix: [[f64; 3]; 3] = EulerAngles::to_rotation_matrix(&eulerangles);
-        let asserted_rotation_matrix: [[f64; 3]; 3] = [
-            [0.8600893382050473, -0.40648913508618606, 0.308241647677416],
-            [0.4698689469495153, 0.8665341013181509, -0.1683503012925674],
-            [
-                -0.19866933079506122,
-                0.28962947762551555,
-                0.9362933635841992,
-            ],
-        ];
+        let asserted_rotation_matrix: [[f64; 3]; 3] = initialize_rotation_matrix();
         assert_eq!(asserted_rotation_matrix, rotation_matrix);
     }
 }
