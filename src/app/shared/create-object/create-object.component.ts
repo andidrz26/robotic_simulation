@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-create-object',
-  standalone: false,
+  standalone: true,
+  imports: [],
   templateUrl: './create-object.component.html',
-  styleUrl: './create-object.component.css'
+  styleUrl: './create-object.component.scss'
 })
 export class CreateObjectComponent {
 
