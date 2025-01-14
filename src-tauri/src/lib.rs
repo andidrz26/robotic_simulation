@@ -103,8 +103,8 @@ fn get_multiplied_quaternion(
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
-fn get_new_eulerangles() -> Result<algorithms::euler::EulerAngles, Error> {
-    Ok(algorithms::euler::EulerAngles::new(1.0, 2.0, 3.0))
+fn get_new_eulerangles(euler_angles: [f64; 3]) -> Result<algorithms::euler::EulerAngles, Error> {
+    Ok(algorithms::euler::EulerAngles::new(euler_angles[0], euler_angles[1], euler_angles[2]))
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
