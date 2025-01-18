@@ -1,1 +1,31 @@
-<p>create-object works!</p>
+<div class="flex justify-center">
+    <form [style]="{ 'padding-top': '2vh' }">
+        <div [style]="{ 'min-width': '50vw' }">
+            <h2 class="text-xl font-bold mb-4">Object Creation</h2>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="type" class="font-semibold w-36">Type</label>
+                <p-select id="type" [options]="types" [(ngModel)]="selectedType"></p-select>
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="height" class="font-semibold w-36">Height</label>
+                <input type="number" pInputText id="height" placeholder="Enter height" [(ngModel)]="height"/>
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="width" class="font-semibold w-36">Width</label>
+                <input type="number" pInputText id="width" placeholder="Enter width" [(ngModel)]="width"/>
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="depth" class="font-semibold w-36">Depth</label>
+                <input type="number" pInputText id="depth" placeholder="Enter depth" [(ngModel)]="depth"/>
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="name" class="font-semibold w-36">Object name</label>
+                <input type="text" pInputText id="objectName" placeholder="Enter object name" [(ngModel)]="name"/>
+            </div>
+            <div class="flex justify-end gap-2">
+                <p-button label="Clear" severity="secondary" />
+                <p-button label="Create" />
+            </div>
+        </div>
+    </form>
+</div>
