@@ -3,7 +3,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
-import { SettingsComponent } from '../settings/settings.component';
+import { Router } from '@angular/router';
 import { NavbarControllService } from '../../core/navbar-controll.service';
 
 @Component({
@@ -15,7 +15,7 @@ import { NavbarControllService } from '../../core/navbar-controll.service';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private navbarControll: NavbarControllService) { }
+  constructor(private navbarControll: NavbarControllService, private router: Router) { }
 
   items: MenuItem[] | undefined;
 
@@ -24,6 +24,9 @@ export class NavbarComponent implements OnInit {
       {
         label: 'Home',
         icon: PrimeIcons.HOME,
+        command: () => {
+          this.router.navigate(['/']);
+        }
       },
       {
         label: 'Project',
@@ -32,11 +35,17 @@ export class NavbarComponent implements OnInit {
           {
             label: 'Create',
             icon: PrimeIcons.PLUS,
-            shortcut: 'Ctrl + N'
+            shortcut: 'Ctrl + N',
+            command: () => {
+              this.router.navigate(['/create']);
+            }
           },
           {
             label: 'Change',
-            icon: PrimeIcons.PENCIL
+            icon: PrimeIcons.PENCIL,
+            command: () => {
+              this.router.navigate(['/create']);
+            }
           },
           {
             label: 'Upload',
@@ -56,6 +65,13 @@ export class NavbarComponent implements OnInit {
             icon: PrimeIcons.REFRESH,
           }
         ],
+      },
+      {
+        label: 'Simulation',
+        icon: PrimeIcons.PLAY,
+        command: () => {
+          this.router.navigate(['/simulation']);
+        }
       }
     ];
   }
