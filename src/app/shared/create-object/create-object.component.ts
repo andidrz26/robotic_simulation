@@ -1,12 +1,72 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SelectModule } from 'primeng/select';
+import { ToastModule } from 'primeng/toast';
+import { TwoDimObject } from './two-dim-object.model';
 
 @Component({
   selector: 'app-create-object',
   standalone: true,
-  imports: [],
+  imports: [ButtonModule, SelectModule, InputTextModule, FormsModule, RadioButtonModule, CommonModule, ToastModule],
   templateUrl: './create-object.component.html',
-  styleUrl: './create-object.component.scss'
+  styleUrls: ['./create-object.component.scss']
 })
 export class CreateObjectComponent {
+
+  constructor(private messageService: MessageService) { }
+
+  header: string = 'Object Creation';
+
+  // List of implemented object types
+  types = ['Cube', 'Sphere', 'Pyramid'];
+
+  // Only 2D and 3D are implemented
+  dimension: string = '2D';
+
+  selectedType: string = 'Cube';
+  height: number | undefined;
+  width: number | undefined;
+  depth: number | undefined;
+  name: string = '';
+
+  clear() {
+    this.height = undefined;
+    this.width = undefined;
+    this.depth = undefined;
+    this.name = '';
+  }
+
+  twoDimObject: TwoDimObject | undefined;
+
+  save() {
+    let severity = 'info';
+    let summary = 'Info';
+    let detail = this.selectedType + ' was successfully created!';
+
+    if (!this.height || !this.width || !this.name) {
+      severity = 'error';
+      summary = 'Error';
+      detail = 'Please fill out all fields!';
+    } else if (!this.depth && this.dimension === '3D') {
+      severity = 'error';
+      summary = 'Error';
+      detail = 'Please fill out all fields!';
+    } else {
+      this.twoDimObject = {
+        name: this.name,
+        type: this.selectedType,
+        dimension: this.dimension,
+        height: this.height!,
+        width: this.width!,
+        depth: this.depth ? this.depth : 0
+      }
+    }
+    this.messageService.add({ severity: severity, summary: summary, detail: detail, life: 3000 });
+  }
 
 }

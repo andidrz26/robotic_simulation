@@ -3,13 +3,14 @@
         <span class="p-text-secondary block mb-8"></span>
         <div class="flex items-center gap-4 mb-4">
             <label for="theme" class="font-semibold w-36">Theme</label>
-            <p-select id="theme" [options]="themes" [(ngModel)]="selectedTheme" [style]="{ 'min-width': '50%' }"></p-select>
+            <p-select id="theme" [options]="themes" [(ngModel)]="selectedTheme" [style]="{ 'min-width': '50%' }" ></p-select>
         </div>
-        <br>
         <div class="flex items-center gap-4 mb-8">
             <label for="save" class="font-semibold w-36">Save on leaving</label>
-            <p-radio-button name="save" value="yes" label="Yes" [(ngModel)]="saveOnLeaving"></p-radio-button>
-            <p-radio-button name="save" value="no" label="No" [(ngModel)]="saveOnLeaving"></p-radio-button>
+            <p-radio-button name="save" [value]="true" [(ngModel)]="saveOnLeaving" />
+            <label for="yes" class="font-semibold">Yes</label>
+            <p-radio-button name="save" [value]="false" [(ngModel)]="saveOnLeaving" />
+            <label for="no" class="font-semibold">No</label>
         </div>
         <div class="flex justify-end gap-2">
             <p-button label="Cancel" severity="secondary" (click)="showDialog()" />

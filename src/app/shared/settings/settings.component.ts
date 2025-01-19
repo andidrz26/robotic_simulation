@@ -29,7 +29,7 @@ export class SettingsComponent implements OnInit {
   backendFolder: string = '';
   saveOnLeaving: boolean = false;
   themes: string[] = ['dark', 'light'];
-  selectedTheme: string = '';
+  selectedTheme: string = 'dark';
 
   saveSettings() {
   }
