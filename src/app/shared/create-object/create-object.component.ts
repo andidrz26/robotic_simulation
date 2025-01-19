@@ -34,6 +34,7 @@ export class CreateObjectComponent {
   width: number | undefined;
   depth: number | undefined;
   name: string = '';
+  filepath: string = '';
 
   clear() {
     this.height = undefined;
@@ -49,7 +50,7 @@ export class CreateObjectComponent {
     let summary = 'Info';
     let detail = this.selectedType + ' was successfully created!';
 
-    if (!this.height || !this.width || !this.name) {
+    if (!this.height || !this.width || !this.name || !this.filepath) {
       severity = 'error';
       summary = 'Error';
       detail = 'Please fill out all fields!';
@@ -59,7 +60,6 @@ export class CreateObjectComponent {
       detail = 'Please fill out all fields!';
     } else {
       this.object = {
-        name: this.name,
         type: this.selectedType,
         dimension: this.dimension,
         height: this.height!,
@@ -67,7 +67,7 @@ export class CreateObjectComponent {
         depth: this.depth ? this.depth : 0
       }
 
-      this.projectsService.addObject(this.object);
+      this.projectsService.addObject(this.object, this.name, this.filepath);
     }
     this.messageService.add({ severity: severity, summary: summary, detail: detail, life: 3000 });
   }
