@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { CreateObjectComponent } from './shared/create-object/create-object.component';
 import { SimulationComponent } from './shared/simulation/simulation.component';
+import { HomeComponent } from './shared/home/home.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: '', component: HomeComponent },
     { path: 'create', component: CreateObjectComponent },
     { path: 'change/:id', component: CreateObjectComponent},
-    { path: 'simulation', component: SimulationComponent}
+    { path: 'simulation', component: SimulationComponent},
+    { path: 'simulation/:id', component: SimulationComponent}
 ];
