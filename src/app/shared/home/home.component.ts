@@ -80,5 +80,6 @@ export class HomeComponent {
 
   selectProject(project: Project): void {
     this.selectedProject = project;
+    this.router.navigate(['/simulation', project.name]);
   }
 }
