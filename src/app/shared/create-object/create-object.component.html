@@ -1,31 +1,41 @@
 <div class="flex justify-center">
-    <form [style]="{ 'padding-top': '2vh' }">
-        <div [style]="{ 'min-width': '50vw' }">
-            <h2 class="text-xl font-bold mb-4">Object Creation</h2>
-            <div class="flex items-center gap-4 mb-4">
-                <label for="type" class="font-semibold w-36">Type</label>
-                <p-select id="type" [options]="types" [(ngModel)]="selectedType"></p-select>
-            </div>
-            <div class="flex items-center gap-4 mb-4">
-                <label for="height" class="font-semibold w-36">Height</label>
-                <input type="number" pInputText id="height" placeholder="Enter height" [(ngModel)]="height"/>
-            </div>
-            <div class="flex items-center gap-4 mb-4">
-                <label for="width" class="font-semibold w-36">Width</label>
-                <input type="number" pInputText id="width" placeholder="Enter width" [(ngModel)]="width"/>
-            </div>
-            <div class="flex items-center gap-4 mb-4">
-                <label for="depth" class="font-semibold w-36">Depth</label>
-                <input type="number" pInputText id="depth" placeholder="Enter depth" [(ngModel)]="depth"/>
-            </div>
-            <div class="flex items-center gap-4 mb-4">
-                <label for="name" class="font-semibold w-36">Object name</label>
-                <input type="text" pInputText id="objectName" placeholder="Enter object name" [(ngModel)]="name"/>
-            </div>
-            <div class="flex justify-end gap-2">
-                <p-button label="Clear" severity="secondary" />
-                <p-button label="Create" />
-            </div>
+    <p-toast />
+    <form [style]="{ 'padding-top': '2vh', 'min-width': '50vw' }">
+        <h2 class="text-xl font-bold mb-4">{{header}}</h2>
+        <div class="flex items-center gap-4 mb-4">
+            <label class="font-semibold w-36">Type</label>
+            <p-select [options]="types" [(ngModel)]="selectedType" [ngModelOptions]="{standalone: true}"></p-select>
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label class="font-semibold w-36">Dimension</label>
+            <p-radio-button name="dimension" value="2D" [(ngModel)]="dimension" [ngModelOptions]="{standalone: true}" />
+            <label class="font-semibold">2D</label>
+            <p-radio-button name="dimension" value="3D" [(ngModel)]="dimension" [ngModelOptions]="{standalone: true}" />
+            <label class="font-semibold">3D</label>
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="height" class="font-semibold w-36">Height</label>
+            <input id="height" type="number" pInputText placeholder="Enter height" [(ngModel)]="height"
+                [ngModelOptions]="{standalone: true}" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="width" class="font-semibold w-36">Width</label>
+            <input id="width" type="number" pInputText placeholder="Enter width" [(ngModel)]="width"
+                [ngModelOptions]="{standalone: true}" />
+        </div>
+        <div *ngIf="dimension=='3D'" class="flex items-center gap-4 mb-4">
+            <label for="depth" class="font-semibold w-36">Depth</label>
+            <input id="depth" type="number" pInputText placeholder="Enter depth" [(ngModel)]="depth"
+                [ngModelOptions]="{standalone: true}" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="name" class="font-semibold w-36">Object name</label>
+            <input id="name" type="text" pInputText placeholder="Enter object name" [(ngModel)]="name"
+                [ngModelOptions]="{standalone: true}" />
+        </div>
+        <div class="flex justify-end gap-2">
+            <p-button label="Clear" severity="secondary" (onClick)="clear()" />
+            <p-button label="Create" (onClick)="save()" />
         </div>
     </form>
 </div>
