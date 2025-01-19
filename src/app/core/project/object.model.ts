@@ -1,4 +1,4 @@
-export interface TwoDimObject {
+export interface Object {
     name: string;
     type: string;
     dimension: string;

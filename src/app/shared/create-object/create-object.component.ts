@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -7,7 +7,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectModule } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
-import { TwoDimObject } from '../../core/project/two-dim-object.model';
+import { Object } from '../../core/project/object.model';
+import { ProjectsService } from '../../core/projects.service';
 
 @Component({
   selector: 'app-create-object',
@@ -18,7 +19,7 @@ import { TwoDimObject } from '../../core/project/two-dim-object.model';
 })
 export class CreateObjectComponent {
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService, private projectsService: ProjectsService) { }
 
   header: string = 'Object Creation';
 
@@ -41,7 +42,7 @@ export class CreateObjectComponent {
     this.name = '';
   }
 
-  twoDimObject: TwoDimObject | undefined;
+  object: Object | undefined;
 
   save() {
     let severity = 'info';
@@ -57,7 +58,7 @@ export class CreateObjectComponent {
       summary = 'Error';
       detail = 'Please fill out all fields!';
     } else {
-      this.twoDimObject = {
+      this.object = {
         name: this.name,
         type: this.selectedType,
         dimension: this.dimension,
@@ -65,6 +66,8 @@ export class CreateObjectComponent {
         width: this.width!,
         depth: this.depth ? this.depth : 0
       }
+
+      this.projectsService.addObject(this.object);
     }
     this.messageService.add({ severity: severity, summary: summary, detail: detail, life: 3000 });
   }
