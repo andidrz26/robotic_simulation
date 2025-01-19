@@ -7,7 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectModule } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
-import { TwoDimObject } from './two-dim-object.model';
+import { TwoDimObject } from '../../core/project/two-dim-object.model';
 
 @Component({
   selector: 'app-create-object',
