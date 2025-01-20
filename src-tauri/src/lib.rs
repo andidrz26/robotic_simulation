@@ -392,7 +392,7 @@ mod tests {
 
     #[test]
     fn test_get_file() {
-        let file_path: &str = "../input/test.txt";
+        let file_path: &str = "../input/test.json";
         match download_file(&file_path) {
             Ok(result) => assert!(true, "Result: {:?}", result),
             Err(error) => {
@@ -404,7 +404,7 @@ mod tests {
 
     #[test]
     fn test_post_file() {
-        let file_path: &str = "../output/test.txt";
+        let file_path: &str = "../output/test.json";
         let content: Vec<u8> = vec![65, 65, 66, 66, 67];
         match upload_file(&file_path, &content) {
             Ok(result) => assert!(true, "File: {:?}", result),
