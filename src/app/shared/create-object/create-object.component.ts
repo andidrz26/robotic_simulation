@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -7,7 +7,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectModule } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
-import { TwoDimObject } from '../../core/project/two-dim-object.model';
+import { Object } from '../../core/project/object.model';
+import { ProjectsService } from '../../core/projects.service';
 
 @Component({
   selector: 'app-create-object',
@@ -18,7 +19,7 @@ import { TwoDimObject } from '../../core/project/two-dim-object.model';
 })
 export class CreateObjectComponent {
 
-  constructor(private messageService: MessageService) { }
+  constructor(private messageService: MessageService, private projectsService: ProjectsService) { }
 
   header: string = 'Object Creation';
 
@@ -33,6 +34,7 @@ export class CreateObjectComponent {
   width: number | undefined;
   depth: number | undefined;
   name: string = '';
+  filepath: string = '';
 
   clear() {
     this.height = undefined;
@@ -41,14 +43,14 @@ export class CreateObjectComponent {
     this.name = '';
   }
 
-  twoDimObject: TwoDimObject | undefined;
+  object: Object | undefined;
 
   save() {
     let severity = 'info';
     let summary = 'Info';
     let detail = this.selectedType + ' was successfully created!';
 
-    if (!this.height || !this.width || !this.name) {
+    if (!this.height || !this.width || !this.name || !this.filepath) {
       severity = 'error';
       summary = 'Error';
       detail = 'Please fill out all fields!';
@@ -57,14 +59,15 @@ export class CreateObjectComponent {
       summary = 'Error';
       detail = 'Please fill out all fields!';
     } else {
-      this.twoDimObject = {
-        name: this.name,
+      this.object = {
         type: this.selectedType,
         dimension: this.dimension,
         height: this.height!,
         width: this.width!,
         depth: this.depth ? this.depth : 0
       }
+
+      this.projectsService.addObject(this.object, this.name, this.filepath);
     }
     this.messageService.add({ severity: severity, summary: summary, detail: detail, life: 3000 });
   }

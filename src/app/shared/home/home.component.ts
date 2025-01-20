@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TableModule } from 'primeng/table';
 import { Project } from '../../core/project/project.model';
+import { ProjectsService } from '../../core/projects.service';
 
 @Component({
   selector: 'app-home',
@@ -13,9 +14,16 @@ import { Project } from '../../core/project/project.model';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
 
-  constructor(private router: Router) { }
+export class HomeComponent implements OnInit{
+
+  constructor(private router: Router, private projectsService: ProjectsService) { }
+
+  projects!: Project[];
+
+  ngOnInit(): void {
+    this.projects = this.projectsService.getProjects();
+  }
 
   selectedProject: Project | undefined;
 
@@ -39,35 +47,6 @@ export class HomeComponent {
       icon: 'pi pi-fw pi-folder-open',
     }
   ]
-
-  // projects filled with dummy data
-  projects: Project[] = [
-    {
-      name: 'Enshrouded',
-      location: 'C:/Users/andip/Saved Games/Enshrouded',
-      saveDate: new Date(2020, 9, 31, 15, 30) // 31st October 2020, 3:30 PM
-    },
-    {
-      name: 'Respawn',
-      location: 'C:/Users/andip/Saved Games/Respawn',
-      saveDate: new Date(2020, 4, 16, 12, 30) // 16th May 2020, 12:30 PM
-    },
-    {
-      name: 'The Last of Us',
-      location: 'C:/Users/andip/Saved Games/The Last of Us',
-      saveDate: new Date(2020, 6, 21, 9, 30) // 21st July 2020, 9:30 AM
-    },
-    {
-      name: 'The Witcher 3',
-      location: 'C:/Users/andip/Saved Games/The Witcher 3',
-      saveDate: new Date(2020, 2, 4, 18, 30) // 4th March 2020, 6:30 PM
-    },
-    {
-      name: 'Uncharted',
-      location: 'C:/Users/andip/Saved Games/Uncharted',
-      saveDate: new Date(2020, 11, 25, 21, 30) // 25th December 2020, 9:30 PM
-    }
-  ];
 
   createReadableDateTime(saveDate: Date): string {
     const date = saveDate.getDate();

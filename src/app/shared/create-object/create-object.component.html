@@ -29,8 +29,13 @@
                 [ngModelOptions]="{standalone: true}" />
         </div>
         <div class="flex items-center gap-4 mb-4">
-            <label for="name" class="font-semibold w-36">Object name</label>
-            <input id="name" type="text" pInputText placeholder="Enter object name" [(ngModel)]="name"
+            <label for="name" class="font-semibold w-36">Project name</label>
+            <input id="name" type="text" pInputText placeholder="Enter project name" [(ngModel)]="name"
+                [ngModelOptions]="{standalone: true}" />
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <label for="path" class="font-semibold w-36">Filepath</label>
+            <input id="path" type="text" pInputText placeholder="Enter filepath" [(ngModel)]="filepath"
                 [ngModelOptions]="{standalone: true}" />
         </div>
         <div class="flex justify-end gap-2">
