@@ -14,6 +14,7 @@ import { ProjectsService } from '../../core/projects.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
+
 export class HomeComponent implements OnInit{
 
   constructor(private router: Router, private projectsService: ProjectsService) { }
