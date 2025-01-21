@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit{
 
   createReadableDateTime(saveDate: Date): string {
     const date = saveDate.getDate();
-    const month = saveDate.getMonth();
+    const month = saveDate.getMonth() + 1;
     const year = saveDate.getFullYear();
     const hours = saveDate.getHours();
     const minutes = saveDate.getMinutes();

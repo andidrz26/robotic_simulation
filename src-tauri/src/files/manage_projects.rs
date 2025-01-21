@@ -5,6 +5,30 @@ use serde::{Deserialize, Serialize};
 use serde_json::to_string;
 
 #[derive(Serialize, Deserialize, Debug)]
+pub struct Date {
+    #[cfg(test)]
+    pub year: i64,
+    #[cfg(test)]
+    pub month_index: i64, // counts from 0 to 11
+    #[cfg(test)]
+    pub date: i64,
+    #[cfg(test)]
+    pub hours: i64,
+    #[cfg(test)]
+    pub minutes: i64,
+    #[cfg(not(test))]
+    year: i64,
+    #[cfg(not(test))]
+    month_index: i64,
+    #[cfg(not(test))]
+    date: i64,
+    #[cfg(not(test))]
+    hours: i64,
+    #[cfg(not(test))]
+    minutes: i64,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Object {
     #[cfg(test)]
     pub types: String,
@@ -35,7 +59,7 @@ pub struct Project {
     #[cfg(test)]
     pub location: String,
     #[cfg(test)]
-    pub save_date: String,
+    pub save_date: Date,
     #[cfg(test)]
     pub object: Object,
     #[cfg(not(test))]
@@ -43,7 +67,7 @@ pub struct Project {
     #[cfg(not(test))]
     location: String,
     #[cfg(not(test))]
-    save_date: String,
+    save_date: Date,
     #[cfg(not(test))]
     object: Object,
 }

@@ -176,7 +176,7 @@ mod tests {
     use std::f64::consts::PI;
 
     use crate::{algorithms::{
-        euler::EulerAngles, matrix::{product_of, sum_of}, quaternion::quaternion::Quaternion}, files::{manage_projects::{Object, Project}, manage_settings::Settings}, vector};
+        euler::EulerAngles, matrix::{product_of, sum_of}, quaternion::quaternion::Quaternion}, files::{manage_projects::{Date, Object, Project}, manage_settings::Settings}, vector};
     
 
     pub fn initialize_3x3(first: &mut Vec<Vec<f64>>, second: &mut Vec<Vec<f64>>) {
@@ -421,10 +421,18 @@ mod tests {
             depth: "10".to_string(),
         };
 
+        let save_date: Date = Date {
+            year: 2021,
+            month_index: 9,
+            date: 1,
+            hours: 12,
+            minutes: 30,
+        };
+
         let project: Project = Project {
             name: "Test".to_string(),
             location: "../output/test.json".to_string(),
-            save_date: "2021-09-01".to_string(),
+            save_date,
             object,
         };
 
