@@ -6,6 +6,7 @@ import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { NavbarControllService } from '../../core/navbar-controll.service';
+import { PrimeNG } from 'primeng/config';
 
 @Component({
   selector: 'app-settings',
@@ -16,7 +17,7 @@ import { NavbarControllService } from '../../core/navbar-controll.service';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(private navbarControll: NavbarControllService) { }
+  constructor(private navbarControll: NavbarControllService, private primeng: PrimeNG) { }
 
   visible: boolean = false;
 
@@ -32,6 +33,12 @@ export class SettingsComponent implements OnInit {
   selectedTheme: string = 'dark';
 
   saveSettings() {
+
+    if(this.selectedTheme === 'dark') {
+      document.querySelector('html')?.classList.toggle('dark');
+    } else { 
+      document.querySelector('html')?.classList.remove('dark');
+    }
   }
 
   showDialog() {
