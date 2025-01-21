@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Project } from './project/project.model';
 import { Object } from './project/object.model';
+import { invoke } from '@tauri-apps/api/core';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,16 @@ import { Object } from './project/object.model';
 export class ProjectsService {
 
   constructor() { }
+
+  async downloadProject(): Promise<Project> {
+    const answer = await invoke<Project>('get_project');
+    return answer;
+  }
+
+  uploadProject(project: Project): void {
+    console.log('Uploading project:', project);
+    invoke<void>('post_project', { project: project });
+  }
 
   // projects filled with dummy data
   projects: Project[] = [
@@ -73,22 +84,19 @@ export class ProjectsService {
     }
   ];
 
-  addProject(value: Project): void {
-    this.projects.push(value);
-  }
-
   getProjects(): Project[] {
     return this.projects;
   }
 
   addObject(value: Object, name: string, location: string): void {
-    this.projects.push(
-      {
-        name: name,
-        location: location,
-        saveDate: new Date(), // Current date and time
-        object: value
-      }
-    );
+    let project = {
+      name: name,
+      location: location,
+      saveDate: new Date(), // Current date and time
+      object: value
+    }
+
+    this.projects.push(project);
+    this.uploadProject(project);
   }
 }
