@@ -5,10 +5,13 @@ pub mod algorithms {
     pub mod vector;
 }
 
+pub mod files;
+
 use algorithms::matrix::{product_of, sum_of};
 use algorithms::quaternion::quaternion::Quaternion;
 use algorithms::vector;
 use algorithms::vector::{cross_product_of, scalar_product_of};
+use files::{download_file, upload_file};
 
 #[derive(Debug, thiserror::Error)]
 enum Error {
@@ -123,6 +126,16 @@ fn get_to_rotation_matrix_eulerangles(
     Ok(euler_angles.to_rotation_matrix())
 }
 
+#[tauri::command(async, rename_all = "snake_case")]
+fn get_file(file_path: &str) -> Result<Vec<u8>, Error> {
+    Ok(download_file(file_path)?)
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
+fn post_file(file_path: &str, content: &[u8]) -> Result<(), Error> {
+    Ok(upload_file(file_path, content)?)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -139,6 +152,8 @@ pub fn run() {
             get_new_eulerangles,
             get_from_rotation_matrix_eulerangles,
             get_to_rotation_matrix_eulerangles,
+            get_file,
+            post_file,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -148,12 +163,12 @@ pub fn run() {
 mod tests {
     use std::f64::consts::PI;
 
-    use crate::algorithms::{
+    use crate::{algorithms::{
         euler::EulerAngles,
         matrix::{product_of, sum_of},
         quaternion::quaternion::Quaternion,
         vector,
-    };
+    }, files::{download_file, upload_file}};
 
     pub fn initialize_3x3(first: &mut Vec<Vec<f64>>, second: &mut Vec<Vec<f64>>) {
         first.push(vec![1.0, 2.0, 3.0]);
@@ -364,7 +379,6 @@ mod tests {
             EulerAngles::new(0.0, 1.5707963267948966, -0.26179938779914935);
         let eulerangles: EulerAngles = EulerAngles::from_rotation_matrix(rotation_matrix);
         assert_eq!(asserted_eulerangles, eulerangles);
-        println!("Eulerangles: {:?}", eulerangles);
     }
 
     #[test]
@@ -374,5 +388,31 @@ mod tests {
         let rotation_matrix: [[f64; 3]; 3] = EulerAngles::to_rotation_matrix(&eulerangles);
         let asserted_rotation_matrix: [[f64; 3]; 3] = initialize_rotation_matrix();
         assert_eq!(asserted_rotation_matrix, rotation_matrix);
+    }
+
+    #[test]
+    fn test_get_file() {
+        let file_path: &str = "../input/test.json";
+        match download_file(&file_path) {
+            Ok(result) => assert!(true, "Result: {:?}", result),
+            Err(error) => {
+                println!("Error: {:?}", error);
+                assert!(true, "Error: {:?}", error);
+            }
+        }
+    }
+
+    #[test]
+    fn test_post_file() {
+        let file_path: &str = "../output/test.json";
+        let content: Vec<u8> = vec![65, 65, 66, 66, 67];
+        match upload_file(&file_path, &content) {
+            Ok(result) => assert!(true, "File: {:?}", result),
+            Err(error) => {
+                println!("Error: {:?}", error);
+                assert!(true, "Error: {:?}", error);
+                return;
+            }
+        };
     }
 }
