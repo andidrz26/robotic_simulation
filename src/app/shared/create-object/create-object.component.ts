@@ -40,6 +40,7 @@ export class CreateObjectComponent {
     this.height = undefined;
     this.width = undefined;
     this.depth = undefined;
+    this.filepath = '';
     this.name = '';
   }
 
