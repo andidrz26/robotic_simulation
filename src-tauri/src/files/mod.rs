@@ -1,5 +1,3 @@
-mod download;
-mod upload;
+pub(crate) mod manage_projects;
 
-pub use download::download_file;
-pub use upload::upload_file;
+pub(crate) mod manage_settings;

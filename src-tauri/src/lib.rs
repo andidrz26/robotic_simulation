@@ -4,14 +4,14 @@ pub mod algorithms {
     pub mod quaternion;
     pub mod vector;
 }
-
-pub mod files;
-
 use algorithms::matrix::{product_of, sum_of};
 use algorithms::quaternion::quaternion::Quaternion;
 use algorithms::vector;
 use algorithms::vector::{cross_product_of, scalar_product_of};
-use files::{download_file, upload_file};
+
+pub mod files;
+use files::manage_projects::Project;
+use files::manage_settings::Settings;
 
 #[derive(Debug, thiserror::Error)]
 enum Error {
@@ -127,13 +127,23 @@ fn get_to_rotation_matrix_eulerangles(
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
-fn get_file(file_path: &str) -> Result<Vec<u8>, Error> {
-    Ok(download_file(file_path)?)
+fn get_project(file_path: &str) -> Result<Project, Error> {
+    Ok(Project::load(file_path)?)
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
-fn post_file(file_path: &str, content: &[u8]) -> Result<(), Error> {
-    Ok(upload_file(file_path, content)?)
+fn post_project(project: Project) -> Result<(), Error> {
+    Ok(Project::save(&project)?)
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
+fn get_settinmgs() -> Result<Settings, Error> {
+    Ok(Settings::load()?)
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
+fn post_settings(settings: Settings) -> Result<(), Error> {
+    Ok(settings.save()?)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -152,8 +162,10 @@ pub fn run() {
             get_new_eulerangles,
             get_from_rotation_matrix_eulerangles,
             get_to_rotation_matrix_eulerangles,
-            get_file,
-            post_file,
+            get_project,
+            post_project,
+            get_settinmgs,
+            post_settings
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -164,11 +176,8 @@ mod tests {
     use std::f64::consts::PI;
 
     use crate::{algorithms::{
-        euler::EulerAngles,
-        matrix::{product_of, sum_of},
-        quaternion::quaternion::Quaternion,
-        vector,
-    }, files::{download_file, upload_file}};
+        euler::EulerAngles, matrix::{product_of, sum_of}, quaternion::quaternion::Quaternion}, files::{manage_projects::{Object, Project}, manage_settings::Settings}, vector};
+    
 
     pub fn initialize_3x3(first: &mut Vec<Vec<f64>>, second: &mut Vec<Vec<f64>>) {
         first.push(vec![1.0, 2.0, 3.0]);
@@ -391,9 +400,9 @@ mod tests {
     }
 
     #[test]
-    fn test_get_file() {
+    fn test_get_project() {
         let file_path: &str = "../input/test.json";
-        match download_file(&file_path) {
+        match Project::load(&file_path) {
             Ok(result) => assert!(true, "Result: {:?}", result),
             Err(error) => {
                 println!("Error: {:?}", error);
@@ -403,10 +412,23 @@ mod tests {
     }
 
     #[test]
-    fn test_post_file() {
-        let file_path: &str = "../output/test.json";
-        let content: Vec<u8> = vec![65, 65, 66, 66, 67];
-        match upload_file(&file_path, &content) {
+    fn test_post_project() {
+        let object: Object = Object {
+            types: "Cube".to_string(),
+            dimension: "3D".to_string(),
+            height: "10".to_string(),
+            width: "10".to_string(),
+            depth: "10".to_string(),
+        };
+
+        let project: Project = Project {
+            name: "Test".to_string(),
+            location: "../output/test.json".to_string(),
+            save_date: "2021-09-01".to_string(),
+            object,
+        };
+
+        match Project::save(&project) {
             Ok(result) => assert!(true, "File: {:?}", result),
             Err(error) => {
                 println!("Error: {:?}", error);
@@ -414,5 +436,33 @@ mod tests {
                 return;
             }
         };
+    }
+
+    #[test]
+    fn test_get_settings() {
+        match Settings::load() {
+            Ok(result) => assert!(true, "Result: {:?}", result),
+            Err(error) => {
+                println!("Error: {:?}", error);
+                assert!(true, "Error: {:?}", error);
+            }
+        }
+    }
+
+    #[test]
+    fn test_post_settings() {
+        let settings: Settings = Settings {
+            theme: "light".to_string(),
+            save_location: "../output".to_string(),
+            save_on_exit: true,
+        };
+
+        match settings.save() {
+            Ok(result) => assert!(true, "File: {:?}", result),
+            Err(error) => {
+                println!("Error: {:?}", error);
+                assert!(true, "Error: {:?}", error);
+            }
+        }
     }
 }

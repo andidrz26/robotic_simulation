@@ -1,5 +1,5 @@
 export interface Object {
-    type: string;
+    types: string;
     dimension: string;
     height: number;
     width: number;

@@ -16,7 +16,7 @@ export class ProjectsService {
       location: 'C:/Users/andip/Saved Games/Enshrouded',
       saveDate: new Date(2020, 9, 31, 15, 30), // 31st October 2020, 3:30 PM
       object: {
-        type: 'Cube',
+        types: 'Cube',
         dimension: '3D',
         height: 10,
         width: 10,
@@ -28,7 +28,7 @@ export class ProjectsService {
       location: 'C:/Users/andip/Saved Games/Respawn',
       saveDate: new Date(2020, 4, 16, 12, 30), // 16th May 2020, 12:30 PM
       object: {
-        type: 'Sphere',
+        types: 'Sphere',
         dimension: '3D',
         height: 10,
         width: 10,
@@ -40,7 +40,7 @@ export class ProjectsService {
       location: 'C:/Users/andip/Saved Games/The Last of Us',
       saveDate: new Date(2020, 6, 21, 9, 30), // 21st July 2020, 9:30 AM
       object: {
-        type: 'Pyramid',
+        types: 'Pyramid',
         dimension: '3D',
         height: 10,
         width: 10,
@@ -52,7 +52,7 @@ export class ProjectsService {
       location: 'C:/Users/andip/Saved Games/The Witcher 3',
       saveDate: new Date(2020, 2, 4, 18, 30), // 4th March 2020, 6:30 PM
       object: {
-        type: 'Cube',
+        types: 'Cube',
         dimension: '3D',
         height: 10,
         width: 10,
@@ -64,7 +64,7 @@ export class ProjectsService {
       location: 'C:/Users/andip/Saved Games/Uncharted',
       saveDate: new Date(2020, 11, 25, 21, 30), // 25th December 2020, 9:30 PM
       object: {
-        type: 'Sphere',
+        types: 'Sphere',
         dimension: '3D',
         height: 10,
         width: 10,

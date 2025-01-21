@@ -61,7 +61,7 @@ export class CreateObjectComponent {
       detail = 'Please fill out all fields!';
     } else {
       this.object = {
-        type: this.selectedType,
+        types: this.selectedType,
         dimension: this.dimension,
         height: this.height!,
         width: this.width!,
