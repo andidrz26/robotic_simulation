@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { Router } from '@angular/router';
 import { NavbarControllService } from '../../core/navbar-controll.service';
+import { SettingsService } from '../../core/settings/settings.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,11 +16,13 @@ import { NavbarControllService } from '../../core/navbar-controll.service';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private navbarControll: NavbarControllService, private router: Router) { }
+  constructor(private navbarControll: NavbarControllService, private settings: SettingsService, private router: Router) { }
 
   items: MenuItem[] | undefined;
 
   ngOnInit() {
+    this.settings.getSettingsFromFile();
+
     this.items = [
       {
         label: 'Home',

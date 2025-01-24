@@ -137,7 +137,7 @@ fn post_project(project: Project) -> Result<(), Error> {
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
-fn get_settinmgs() -> Result<Settings, Error> {
+fn get_settings() -> Result<Settings, Error> {
     Ok(Settings::load()?)
 }
 
@@ -164,7 +164,7 @@ pub fn run() {
             get_to_rotation_matrix_eulerangles,
             get_project,
             post_project,
-            get_settinmgs,
+            get_settings,
             post_settings
         ])
         .run(tauri::generate_context!())
@@ -461,8 +461,8 @@ mod tests {
     fn test_post_settings() {
         let settings: Settings = Settings {
             theme: "light".to_string(),
-            save_location: "../output".to_string(),
-            save_on_exit: true,
+            savelocation: "../output".to_string(),
+            saveonexit: true,
         };
 
         match settings.save() {

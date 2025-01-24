@@ -8,15 +8,15 @@ pub struct Settings {
     #[cfg(test)]
     pub theme: String,
     #[cfg(test)]
-    pub save_location: String,
+    pub savelocation: String,
     #[cfg(test)]
-    pub save_on_exit: bool,
+    pub saveonexit: bool,
     #[cfg(not(test))]
     theme: String,
     #[cfg(not(test))]
-    save_location: String,
+    savelocation: String,
     #[cfg(not(test))]
-    save_on_exit: bool,
+    saveonexit: bool,
 }
 
 impl Settings {
