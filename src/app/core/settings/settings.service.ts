@@ -16,14 +16,30 @@ export class SettingsService {
   private currentThemeSubject: BehaviorSubject<string> = new BehaviorSubject<string>('dark');
   public currentTheme$: Observable<string> = this.currentThemeSubject.asObservable();
 
+  private currentSavelocationSubject: BehaviorSubject<string> = new BehaviorSubject<string>('../output');
+  public currentSavelocation$: Observable<string> = this.currentSavelocationSubject.asObservable();
+
+  private currentExitSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public currentExit$: Observable<boolean> = this.currentExitSubject.asObservable();
+
   setCurrentTheme(value: string): void {
     this.currentThemeSubject.next(value);
+  }
+
+  setCurrentSavelocation(value: string): void {
+    this.currentSavelocationSubject.next(value);
+  }
+
+  setCurrentExit(value: boolean): void {
+    this.currentExitSubject.next(value);
   }
 
   getSettingsFromFile(): void {
     invoke<Settings>('get_settings').then((settings: Settings) => {
       this.settings = settings;
     }).then(() => {
+      this.setCurrentSavelocation(this.settings.savelocation);
+      this.setCurrentExit(this.settings.saveonexit);
       this.checkForTheme();
     });
   }
@@ -47,10 +63,6 @@ export class SettingsService {
       }
     }
     this.setCurrentTheme(this.settings.theme);
-  }
-
-  getSettings(): Settings {
-    return this.settings;
   }
 
   saveSettings(settings: Settings): void {

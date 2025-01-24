@@ -27,6 +27,12 @@ export class SettingsComponent implements OnInit {
   selectedTheme: string = 'system';
 
   ngOnInit(): void {
+    this.settings.currentSavelocation$.subscribe(value => {
+      this.backendFolder = value;
+    });
+    this.settings.currentExit$.subscribe(value => {
+      this.saveOnLeaving = value;
+    });
     this.settings.currentTheme$.subscribe(value => {
       this.selectedTheme = value;
     });
