@@ -6,7 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TableModule } from 'primeng/table';
 import { Project } from '../../core/project/project.model';
-import { ProjectsService } from '../../core/projects.service';
+import { ProjectsService } from '../../core/project/projects.service';
+import { ProjectDate } from '../../core/project/date.model';
 
 @Component({
   selector: 'app-home',
@@ -48,12 +49,12 @@ export class HomeComponent implements OnInit{
     }
   ]
 
-  createReadableDateTime(saveDate: Date): string {
-    const date = saveDate.getDate();
-    const month = saveDate.getMonth() + 1;
-    const year = saveDate.getFullYear();
-    const hours = saveDate.getHours();
-    const minutes = saveDate.getMinutes();
+  createReadableDateTime(saveDate: ProjectDate): string {
+    const date = saveDate.day;
+    const month = saveDate.month;
+    const year = saveDate.year;
+    const hours = saveDate.hours;
+    const minutes = saveDate.minutes;
     return `${date}/${month}/${year} ${hours}:${minutes}`;
   }
 

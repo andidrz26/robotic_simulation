@@ -416,15 +416,15 @@ mod tests {
         let object: Object = Object {
             types: "Cube".to_string(),
             dimension: "3D".to_string(),
-            height: "10".to_string(),
-            width: "10".to_string(),
-            depth: "10".to_string(),
+            height: 10,
+            width: 10,
+            depth: 10,
         };
 
-        let save_date: Date = Date {
+        let savedate: Date = Date {
             year: 2021,
-            month_index: 9,
-            date: 1,
+            month: 9,
+            day: 1,
             hours: 12,
             minutes: 30,
         };
@@ -432,7 +432,7 @@ mod tests {
         let project: Project = Project {
             name: "Test".to_string(),
             location: "../output/test.json".to_string(),
-            save_date,
+            savedate,
             object,
         };
 

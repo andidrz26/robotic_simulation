@@ -8,7 +8,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectModule } from 'primeng/select';
 import { ToastModule } from 'primeng/toast';
 import { Object } from '../../core/project/object.model';
-import { ProjectsService } from '../../core/projects.service';
+import { ProjectsService } from '../../core/project/projects.service';
 
 @Component({
   selector: 'app-create-object',
@@ -69,6 +69,7 @@ export class CreateObjectComponent {
       }
 
       this.projectsService.addObject(this.object, this.name, this.filepath);
+      this.clear();
     }
     this.messageService.add({ severity: severity, summary: summary, detail: detail, life: 3000 });
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Project } from './project/project.model';
-import { Object } from './project/object.model';
+import { Project } from './project.model';
+import { Object } from './object.model';
 import { invoke } from '@tauri-apps/api/core';
 
 @Injectable({
@@ -25,7 +25,13 @@ export class ProjectsService {
     {
       name: 'Enshrouded',
       location: 'C:/Users/andip/Saved Games/Enshrouded',
-      saveDate: new Date(2020, 9, 31, 15, 30), // 31st October 2020, 3:30 PM
+      savedate: {
+        day: 10,
+        month: 3,
+        year: 2020,
+        hours: 9,
+        minutes: 30
+      },
       object: {
         types: 'Cube',
         dimension: '3D',
@@ -37,7 +43,13 @@ export class ProjectsService {
     {
       name: 'Respawn',
       location: 'C:/Users/andip/Saved Games/Respawn',
-      saveDate: new Date(2020, 4, 16, 12, 30), // 16th May 2020, 12:30 PM
+      savedate: {
+        day: 15,
+        month: 5,
+        year: 2020,
+        hours: 12,
+        minutes: 30
+      },
       object: {
         types: 'Sphere',
         dimension: '3D',
@@ -49,7 +61,13 @@ export class ProjectsService {
     {
       name: 'The Last of Us',
       location: 'C:/Users/andip/Saved Games/The Last of Us',
-      saveDate: new Date(2020, 6, 21, 9, 30), // 21st July 2020, 9:30 AM
+      savedate: {
+        day: 20,
+        month: 7,
+        year: 2020,
+        hours: 15,
+        minutes: 30
+      },
       object: {
         types: 'Pyramid',
         dimension: '3D',
@@ -61,7 +79,13 @@ export class ProjectsService {
     {
       name: 'The Witcher 3',
       location: 'C:/Users/andip/Saved Games/The Witcher 3',
-      saveDate: new Date(2020, 2, 4, 18, 30), // 4th March 2020, 6:30 PM
+      savedate: {
+        day: 25,
+        month: 9,
+        year: 2020,
+        hours: 18,
+        minutes: 30
+      },
       object: {
         types: 'Cube',
         dimension: '3D',
@@ -73,7 +97,13 @@ export class ProjectsService {
     {
       name: 'Uncharted',
       location: 'C:/Users/andip/Saved Games/Uncharted',
-      saveDate: new Date(2020, 11, 25, 21, 30), // 25th December 2020, 9:30 PM
+      savedate: {
+        day: 30,
+        month: 11,
+        year: 2020,
+        hours: 21,
+        minutes: 30
+      },
       object: {
         types: 'Sphere',
         dimension: '3D',
@@ -89,10 +119,17 @@ export class ProjectsService {
   }
 
   addObject(value: Object, name: string, location: string): void {
+    let date: Date = new Date();
     let project = {
       name: name,
       location: location,
-      saveDate: new Date(), // Current date and time
+      savedate: {
+        day: date.getDate(),
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+        hours: date.getHours(),
+        minutes: date.getMinutes()
+      },
       object: value
     }
 
