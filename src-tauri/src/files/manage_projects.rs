@@ -90,3 +90,16 @@ impl Project {
         Ok(project)
     }
 }
+
+pub fn list_projects(location: &str) -> io::Result<Vec<Project>> {
+    let mut projects: Vec<Project> = Vec::new();
+    for entry in std::fs::read_dir(location)? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.is_file() {
+            let file_name = path.file_stem().unwrap().to_str().unwrap().to_string();
+            projects.push(Project::load(location, &file_name)?);
+        }
+    }
+    Ok(projects)
+}

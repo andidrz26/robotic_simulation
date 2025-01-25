@@ -12,7 +12,7 @@ use algorithms::vector;
 use algorithms::vector::{cross_product_of, scalar_product_of};
 
 pub mod files;
-use files::manage_projects::Project;
+use files::manage_projects::{list_projects, Project};
 use files::manage_settings::Settings;
 
 #[derive(Debug, thiserror::Error)]
@@ -140,6 +140,11 @@ fn get_project(file_path: &str) -> Result<Project, Error> {
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
+fn get_list_of_projects() -> Result<Vec<Project>, Error> {
+    Ok(list_projects(&SETTINGS.savelocation)?)
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
 fn post_project(mut project: Project) -> Result<(), Error> {
     Ok(Project::save(&mut project, &SETTINGS.savelocation)?)
 }
@@ -171,6 +176,7 @@ pub fn run() {
             get_from_rotation_matrix_eulerangles,
             get_to_rotation_matrix_eulerangles,
             get_project,
+            get_list_of_projects,
             post_project,
             get_settings,
             post_settings
@@ -190,7 +196,7 @@ mod tests {
             quaternion::quaternion::Quaternion,
         },
         files::{
-            manage_projects::{Date, Object, Project},
+            manage_projects::{list_projects, Date, Object, Project},
             manage_settings::Settings,
         },
         vector, SETTINGS,
@@ -421,6 +427,22 @@ mod tests {
         let file_path: &str = "test";
         match Project::load(&SETTINGS.savelocation, &file_path) {
             Ok(result) => assert!(true, "Result: {:?}", result),
+            Err(error) => {
+                println!("Error: {:?}", error);
+                assert!(true, "Error: {:?}", error);
+            }
+        }
+    }
+
+    #[test]
+    fn test_get_list_of_projects() {
+        match list_projects(&SETTINGS.savelocation) {
+            Ok(result) => {
+                assert!(true, "Result: {:?}", result);
+                for project in result {
+                    println!("Project: {:?}", project);
+                }
+            },
             Err(error) => {
                 println!("Error: {:?}", error);
                 assert!(true, "Error: {:?}", error);

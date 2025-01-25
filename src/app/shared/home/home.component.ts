@@ -23,19 +23,15 @@ export class HomeComponent implements OnInit{
   projects!: Project[];
 
   ngOnInit(): void {
-    this.projects = this.projectsService.getProjects();
+    this.projectsService.loadProjects();
+    this.projectsService.currentProjects$.subscribe((projects) => {
+      this.projects = projects;
+    });
   }
 
   selectedProject: Project | undefined;
 
   options: MenuItem[] = [
-    {
-      label: 'Home',
-      icon: 'pi pi-fw pi-home',
-      command: () => {
-        this.router.navigate(['/']);
-      }
-    },
     {
       label: 'New',
       icon: 'pi pi-fw pi-plus',
