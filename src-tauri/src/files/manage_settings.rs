@@ -7,14 +7,11 @@ use serde_json::to_string;
 pub struct Settings {
     #[cfg(test)]
     pub theme: String,
-    #[cfg(test)]
     pub savelocation: String,
     #[cfg(test)]
     pub saveonexit: bool,
     #[cfg(not(test))]
     theme: String,
-    #[cfg(not(test))]
-    savelocation: String,
     #[cfg(not(test))]
     saveonexit: bool,
 }

@@ -118,11 +118,11 @@ export class ProjectsService {
     return this.projects;
   }
 
-  addObject(value: Object, name: string, location: string): void {
+  addObject(value: Object, name: string): void {
     let date: Date = new Date();
     let project = {
       name: name,
-      location: location,
+      location: '',
       savedate: {
         day: date.getDate(),
         month: date.getMonth() + 1,

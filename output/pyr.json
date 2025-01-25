@@ -1,0 +1,18 @@
+{
+    "name": "pyr",
+    "savedate": {
+        "year": 2025,
+        "month": 1,
+        "day": 25,
+        "hours": 13,
+        "minutes": 55
+    },
+    "location": "../output/pyr.json",
+    "object": {
+        "types": "Pyramid",
+        "dimension": "2D",
+        "height": 89,
+        "width": 170,
+        "depth": 0
+    }
+}

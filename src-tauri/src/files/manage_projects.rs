@@ -57,30 +57,33 @@ pub struct Project {
     #[cfg(test)]
     pub name: String,
     #[cfg(test)]
-    pub location: String,
-    #[cfg(test)]
     pub savedate: Date,
+    #[cfg(test)]
+    pub location: String,
     #[cfg(test)]
     pub object: Object,
     #[cfg(not(test))]
     name: String,
     #[cfg(not(test))]
-    location: String,
-    #[cfg(not(test))]
     savedate: Date,
+    #[cfg(not(test))]
+    location: String,
     #[cfg(not(test))]
     object: Object,
 }
 
+static EXTENSION: &str = ".json";
+
 impl Project {
-    pub fn save(&self) -> io::Result<()> {
+    pub fn save(&mut self, file_path: &str) -> io::Result<()> {
+        self.location = format!("{}{}{}", file_path, self.name, EXTENSION);
         let mut file = File::create(&self.location)?;
         file.write_all(&to_string(&self)?.into_bytes())?;
         Ok(())
     }
 
-    pub fn load(location: &str) -> io::Result<Project> {
-        let mut file = File::open(location)?;
+    pub fn load(location: &str, file_name: &str) -> io::Result<Project> {
+        let mut file = File::open(format!("{}{}{}", location, file_name, EXTENSION))?;
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
         let project: Project = serde_json::from_slice(&buffer)?;
