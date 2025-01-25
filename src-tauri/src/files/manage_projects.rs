@@ -81,14 +81,14 @@ impl Project {
         file.write_all(&to_string(&self)?.into_bytes())?;
         Ok(())
     }
+}
 
-    pub fn load(location: &str, file_name: &str) -> io::Result<Project> {
-        let mut file = File::open(format!("{}{}{}", location, file_name, EXTENSION))?;
-        let mut buffer = Vec::new();
-        file.read_to_end(&mut buffer)?;
-        let project: Project = serde_json::from_slice(&buffer)?;
-        Ok(project)
-    }
+pub fn load(location: &str, file_name: &str) -> io::Result<Project> {
+    let mut file = File::open(format!("{}{}{}", location, file_name, EXTENSION))?;
+    let mut buffer = Vec::new();
+    file.read_to_end(&mut buffer)?;
+    let project: Project = serde_json::from_slice(&buffer)?;
+    Ok(project)
 }
 
 pub fn list_projects(location: &str) -> io::Result<Vec<Project>> {
@@ -98,7 +98,7 @@ pub fn list_projects(location: &str) -> io::Result<Vec<Project>> {
         let path = entry.path();
         if path.is_file() {
             let file_name = path.file_stem().unwrap().to_str().unwrap().to_string();
-            projects.push(Project::load(location, &file_name)?);
+            projects.push(load(location, &file_name)?);
         }
     }
     Ok(projects)

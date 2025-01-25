@@ -12,7 +12,7 @@ use algorithms::vector;
 use algorithms::vector::{cross_product_of, scalar_product_of};
 
 pub mod files;
-use files::manage_projects::{list_projects, Project};
+use files::manage_projects::{list_projects, load, Project};
 use files::manage_settings::Settings;
 
 #[derive(Debug, thiserror::Error)]
@@ -136,7 +136,7 @@ fn get_to_rotation_matrix_eulerangles(
 
 #[tauri::command(async, rename_all = "snake_case")]
 fn get_project(file_path: &str) -> Result<Project, Error> {
-    Ok(Project::load(&SETTINGS.savelocation, file_path)?)
+    Ok(load(&SETTINGS.savelocation, file_path)?)
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
@@ -196,7 +196,7 @@ mod tests {
             quaternion::quaternion::Quaternion,
         },
         files::{
-            manage_projects::{list_projects, Date, Object, Project},
+            manage_projects::{list_projects, load, Date, Object, Project},
             manage_settings::Settings,
         },
         vector, SETTINGS,
@@ -425,7 +425,7 @@ mod tests {
     #[test]
     fn test_get_project() {
         let file_path: &str = "test";
-        match Project::load(&SETTINGS.savelocation, &file_path) {
+        match load(&SETTINGS.savelocation, &file_path) {
             Ok(result) => assert!(true, "Result: {:?}", result),
             Err(error) => {
                 println!("Error: {:?}", error);
