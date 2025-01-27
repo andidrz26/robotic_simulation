@@ -56,6 +56,10 @@ export class HomeComponent implements OnInit{
 
   selectProject(project: Project): void {
     this.selectedProject = project;
-    this.router.navigate(['/simulation', project.name]);
+    if(project.object.dimension == '3D') {
+      this.router.navigate(['/simulation3d', this.selectedProject.name]);
+    } else {
+      this.router.navigate(['/simulation2d', this.selectedProject.name]);
+    }
   }
 }
