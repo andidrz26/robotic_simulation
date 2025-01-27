@@ -6,7 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TableModule } from 'primeng/table';
 import { Project } from '../../core/project/project.model';
-import { ProjectsService } from '../../core/projects.service';
+import { ProjectsService } from '../../core/project/projects.service';
+import { ProjectDate } from '../../core/project/date.model';
 
 @Component({
   selector: 'app-home',
@@ -22,19 +23,15 @@ export class HomeComponent implements OnInit{
   projects!: Project[];
 
   ngOnInit(): void {
-    this.projects = this.projectsService.getProjects();
+    this.projectsService.loadProjects();
+    this.projectsService.currentProjects$.subscribe((projects) => {
+      this.projects = projects;
+    });
   }
 
   selectedProject: Project | undefined;
 
   options: MenuItem[] = [
-    {
-      label: 'Home',
-      icon: 'pi pi-fw pi-home',
-      command: () => {
-        this.router.navigate(['/']);
-      }
-    },
     {
       label: 'New',
       icon: 'pi pi-fw pi-plus',
@@ -48,17 +45,21 @@ export class HomeComponent implements OnInit{
     }
   ]
 
-  createReadableDateTime(saveDate: Date): string {
-    const date = saveDate.getDate();
-    const month = saveDate.getMonth() + 1;
-    const year = saveDate.getFullYear();
-    const hours = saveDate.getHours();
-    const minutes = saveDate.getMinutes();
+  createReadableDateTime(saveDate: ProjectDate): string {
+    const date = saveDate.day;
+    const month = saveDate.month;
+    const year = saveDate.year;
+    const hours = saveDate.hours;
+    const minutes = saveDate.minutes;
     return `${date}/${month}/${year} ${hours}:${minutes}`;
   }
 
   selectProject(project: Project): void {
     this.selectedProject = project;
-    this.router.navigate(['/simulation', project.name]);
+    if(project.object.dimension == '3D') {
+      this.router.navigate(['/simulation3d', this.selectedProject.name]);
+    } else {
+      this.router.navigate(['/simulation2d', this.selectedProject.name]);
+    }
   }
 }

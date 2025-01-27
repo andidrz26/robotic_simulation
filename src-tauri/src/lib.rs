@@ -4,13 +4,15 @@ pub mod algorithms {
     pub mod quaternion;
     pub mod vector;
 }
+use std::sync::LazyLock;
+
 use algorithms::matrix::{product_of, sum_of};
 use algorithms::quaternion::quaternion::Quaternion;
 use algorithms::vector;
 use algorithms::vector::{cross_product_of, scalar_product_of};
 
 pub mod files;
-use files::manage_projects::Project;
+use files::manage_projects::{list_projects, load, Project};
 use files::manage_settings::Settings;
 
 #[derive(Debug, thiserror::Error)]
@@ -28,6 +30,8 @@ impl serde::Serialize for Error {
         serializer.serialize_str(self.to_string().as_ref())
     }
 }
+
+static SETTINGS: LazyLock<Settings> = LazyLock::new(|| Settings::load().unwrap());
 
 #[tauri::command(async, rename_all = "snake_case")]
 fn get_multiplied_matrix(
@@ -107,7 +111,11 @@ fn get_multiplied_quaternion(
 
 #[tauri::command(async, rename_all = "snake_case")]
 fn get_new_eulerangles(euler_angles: [f64; 3]) -> Result<algorithms::euler::EulerAngles, Error> {
-    Ok(algorithms::euler::EulerAngles::new(euler_angles[0], euler_angles[1], euler_angles[2]))
+    Ok(algorithms::euler::EulerAngles::new(
+        euler_angles[0],
+        euler_angles[1],
+        euler_angles[2],
+    ))
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
@@ -128,16 +136,21 @@ fn get_to_rotation_matrix_eulerangles(
 
 #[tauri::command(async, rename_all = "snake_case")]
 fn get_project(file_path: &str) -> Result<Project, Error> {
-    Ok(Project::load(file_path)?)
+    Ok(load(&SETTINGS.savelocation, file_path)?)
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
-fn post_project(project: Project) -> Result<(), Error> {
-    Ok(Project::save(&project)?)
+fn get_list_of_projects() -> Result<Vec<Project>, Error> {
+    Ok(list_projects(&SETTINGS.savelocation)?)
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
-fn get_settinmgs() -> Result<Settings, Error> {
+fn post_project(mut project: Project) -> Result<(), Error> {
+    Ok(Project::save(&mut project, &SETTINGS.savelocation)?)
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
+fn get_settings() -> Result<Settings, Error> {
     Ok(Settings::load()?)
 }
 
@@ -163,8 +176,9 @@ pub fn run() {
             get_from_rotation_matrix_eulerangles,
             get_to_rotation_matrix_eulerangles,
             get_project,
+            get_list_of_projects,
             post_project,
-            get_settinmgs,
+            get_settings,
             post_settings
         ])
         .run(tauri::generate_context!())
@@ -175,9 +189,18 @@ pub fn run() {
 mod tests {
     use std::f64::consts::PI;
 
-    use crate::{algorithms::{
-        euler::EulerAngles, matrix::{product_of, sum_of}, quaternion::quaternion::Quaternion}, files::{manage_projects::{Date, Object, Project}, manage_settings::Settings}, vector};
-    
+    use crate::{
+        algorithms::{
+            euler::EulerAngles,
+            matrix::{product_of, sum_of},
+            quaternion::quaternion::Quaternion,
+        },
+        files::{
+            manage_projects::{list_projects, load, Date, Object, Project},
+            manage_settings::Settings,
+        },
+        vector, SETTINGS,
+    };
 
     pub fn initialize_3x3(first: &mut Vec<Vec<f64>>, second: &mut Vec<Vec<f64>>) {
         first.push(vec![1.0, 2.0, 3.0]);
@@ -401,9 +424,25 @@ mod tests {
 
     #[test]
     fn test_get_project() {
-        let file_path: &str = "../input/test.json";
-        match Project::load(&file_path) {
+        let file_path: &str = "test";
+        match load(&SETTINGS.savelocation, &file_path) {
             Ok(result) => assert!(true, "Result: {:?}", result),
+            Err(error) => {
+                println!("Error: {:?}", error);
+                assert!(true, "Error: {:?}", error);
+            }
+        }
+    }
+
+    #[test]
+    fn test_get_list_of_projects() {
+        match list_projects(&SETTINGS.savelocation) {
+            Ok(result) => {
+                assert!(true, "Result: {:?}", result);
+                for project in result {
+                    println!("Project: {:?}", project);
+                }
+            },
             Err(error) => {
                 println!("Error: {:?}", error);
                 assert!(true, "Error: {:?}", error);
@@ -416,27 +455,27 @@ mod tests {
         let object: Object = Object {
             types: "Cube".to_string(),
             dimension: "3D".to_string(),
-            height: "10".to_string(),
-            width: "10".to_string(),
-            depth: "10".to_string(),
+            height: 10,
+            width: 10,
+            depth: 10,
         };
 
-        let save_date: Date = Date {
+        let savedate: Date = Date {
             year: 2021,
-            month_index: 9,
-            date: 1,
+            month: 9,
+            day: 1,
             hours: 12,
             minutes: 30,
         };
 
-        let project: Project = Project {
-            name: "Test".to_string(),
-            location: "../output/test.json".to_string(),
-            save_date,
+        let mut project: Project = Project {
+            name: "test".to_string(),
+            savedate,
+            location: format!("{}{}{}", SETTINGS.savelocation, "test", ".json"),
             object,
         };
 
-        match Project::save(&project) {
+        match Project::save(&mut project, SETTINGS.savelocation.as_str()) {
             Ok(result) => assert!(true, "File: {:?}", result),
             Err(error) => {
                 println!("Error: {:?}", error);
@@ -461,8 +500,8 @@ mod tests {
     fn test_post_settings() {
         let settings: Settings = Settings {
             theme: "light".to_string(),
-            save_location: "../output".to_string(),
-            save_on_exit: true,
+            savelocation: "../output".to_string(),
+            saveonexit: true,
         };
 
         match settings.save() {

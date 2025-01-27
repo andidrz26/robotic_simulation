@@ -1,8 +1,9 @@
+import { ProjectDate } from "./date.model";
 import { Object } from "./object.model";
 
 export interface Project {
     name: string;
     location: string;
-    saveDate: Date;
+    savedate: ProjectDate;
     object: Object
 }

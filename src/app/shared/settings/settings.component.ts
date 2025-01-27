@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { NavbarControllService } from '../../core/navbar-controll.service';
 import { PrimeNG } from 'primeng/config';
+import { SettingsService } from '../../core/settings/settings.service';
 
 @Component({
   selector: 'app-settings',
@@ -17,28 +18,35 @@ import { PrimeNG } from 'primeng/config';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(private navbarControll: NavbarControllService, private primeng: PrimeNG) { }
+  constructor(private navbarControll: NavbarControllService, private settings: SettingsService, private primeng: PrimeNG) { }
 
   visible: boolean = false;
+  backendFolder: string = '';
+  saveOnLeaving: boolean = false;
+  themes: string[] = ['dark', 'light', 'system'];
+  selectedTheme: string = 'system';
 
   ngOnInit(): void {
+    this.settings.currentSavelocation$.subscribe(value => {
+      this.backendFolder = value;
+    });
+    this.settings.currentExit$.subscribe(value => {
+      this.saveOnLeaving = value;
+    });
+    this.settings.currentTheme$.subscribe(value => {
+      this.selectedTheme = value;
+    });
     this.navbarControll.currentValue$.subscribe(value => {
       this.visible = value;
     });
   }
 
-  backendFolder: string = '';
-  saveOnLeaving: boolean = false;
-  themes: string[] = ['dark', 'light'];
-  selectedTheme: string = 'dark';
-
   saveSettings() {
-
-    if(this.selectedTheme === 'dark') {
-      document.querySelector('html')?.classList.toggle('dark');
-    } else { 
-      document.querySelector('html')?.classList.remove('dark');
-    }
+    this.settings.saveSettings({
+      savelocation: this.backendFolder,
+      saveonexit: this.saveOnLeaving,
+      theme: this.selectedTheme
+    });
   }
 
   showDialog() {

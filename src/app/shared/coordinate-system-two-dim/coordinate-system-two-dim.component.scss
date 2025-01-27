@@ -1,0 +1,60 @@
+.coordinate-system {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: calc(100vh - 58px);
+    border: 1px solid black;
+  }
+  
+  .grid {
+    background:
+          linear-gradient(-90deg, rgba(0,0,0,.05) 1px, transparent 1px),
+          linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px), 
+          linear-gradient(-90deg, rgba(0, 0, 0, .04) 1px, transparent 1px),
+          linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+          linear-gradient(transparent 3px, #f2f2f2 3px, #f2f2f2 78px, transparent 78px),
+          linear-gradient(-90deg, #aaa 1px, transparent 1px),
+          linear-gradient(-90deg, transparent 3px, #f2f2f2 3px, #f2f2f2 78px, transparent 78px),
+          linear-gradient(#aaa 1px, transparent 1px),
+          #f2f2f2;
+      background-size:
+          4px 4px,
+          4px 4px,
+          80px 80px,
+          80px 80px,
+          80px 80px,
+          80px 80px,
+          80px 80px,
+          80px 80px;
+  }
+  
+  .y-axis {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background-color: red;
+    transform: translateX(-50%);
+  }
+  
+  .x-axis {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background-color: blue;
+    transform: translateY(-50%);
+  }
+  
+  .circle {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    top: calc(50% - 40px);
+    left: calc(50% - 40px);
+    border-radius: 50%;
+    background-color: rgba(0, 128, 0, 0.5);
+  }
