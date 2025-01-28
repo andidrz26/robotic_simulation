@@ -29,8 +29,6 @@ export class HomeComponent implements OnInit{
     });
   }
 
-  selectedProject: Project | undefined;
-
   options: MenuItem[] = [
     {
       label: 'New',
@@ -55,11 +53,11 @@ export class HomeComponent implements OnInit{
   }
 
   selectProject(project: Project): void {
-    this.selectedProject = project;
+    this.projectsService.setProject(project);
     if(project.object.dimension == '3D') {
-      this.router.navigate(['/simulation3d', this.selectedProject.name]);
+      this.router.navigate(['/simulation3d', project.name]);
     } else {
-      this.router.navigate(['/simulation2d', this.selectedProject.name]);
+      this.router.navigate(['/simulation2d', project.name]);
     }
   }
 }

@@ -8,12 +8,11 @@
 }
 
 .cube {
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     position: relative;
     transform-style: preserve-3d;
     transform: translateZ(-100px);
-    transition: transform 1s;
 }
 
 .cube.show-top-right {
@@ -22,22 +21,22 @@
 
 .cube__face {
     position: absolute;
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     border: 2px solid grey;
-    line-height: 600px;
+    line-height: 500px;
 }
 
 .cube__face--back {
-    transform: rotateY(180deg) translateZ(300px);
+    transform: rotateY(180deg) translateZ(250px);
 }
 
 .cube__face--left {
-    transform: rotateY(-90deg) translateZ(300px);
+    transform: rotateY(-90deg) translateZ(250px);
 }
 
 .cube__face--bottom {
-    transform: rotateX(-90deg) translateZ(300px);
+    transform: rotateX(-90deg) translateZ(250px);
 }
 
 .grid {

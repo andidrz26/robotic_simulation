@@ -24,10 +24,17 @@ export class ProjectsService {
   private currentProjectsSubject: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
   public currentProjects$: Observable<Project[]> = this.currentProjectsSubject.asObservable();
 
+  private currentProjectSubject: BehaviorSubject<Project> = new BehaviorSubject<Project>({} as Project);
+  public currentProject$: Observable<Project> = this.currentProjectSubject.asObservable();
+
   loadProjects(): void {
     invoke<Project[]>('get_list_of_projects').then((answer) => {
       this.currentProjectsSubject.next(answer);
     });
+  }
+
+  setProject(project: Project): void {
+    this.currentProjectSubject.next(project);
   }
 
   addObject(value: Object, name: string): void {

@@ -2,5 +2,11 @@
     <div class="coordinate-system">
         <div class="y-axis"></div>
         <div class="x-axis"></div>
+        <div [ngClass]="{
+            'object circle':(type === 'Sphere'),
+            'object triangle':(type === 'Triangle'),
+            'object':(type === 'Cube')
+            }">
+        </div>
     </div>
 </div>
