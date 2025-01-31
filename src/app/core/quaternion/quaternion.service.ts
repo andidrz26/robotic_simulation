@@ -16,29 +16,26 @@ export class QuaternionService {
     vectorY: 3, 
     vectorZ: 4 
   };
-  quaternion: number[] = [];
+  quaternion: Quaternion = {} as Quaternion;
 
-  addQuaternion(event: SubmitEvent): number[] {
-    event.preventDefault();
-    invoke<[]>("get_added_quaternion", { first_summand: this.inputArray, second_summand: this.inputArray }).then((answer) => {
+  addQuaternion(quaternionOne: Quaternion, quaternionTwo: Quaternion): Quaternion {
+    invoke<Quaternion>("get_added_quaternion", { first_summand: quaternionOne, second_summand: quaternionTwo }).then((answer) => {
       this.quaternion = answer;
       console.debug(this.quaternion);
     })
     return this.quaternion;
   }
 
-  multiplyQuaternions(event: SubmitEvent): number[] {
-    event.preventDefault();
-    invoke<[]>("get_multiplied_quaternion", { first_factor: this.inputQuaternion, second_factor: this.inputQuaternion }).then((answer) => {
+  multiplyQuaternions(quaternionOne: Quaternion, quaternionTwo: Quaternion): Quaternion {
+    invoke<Quaternion>("get_multiplied_quaternion", { first_factor: quaternionOne, second_factor: quaternionTwo }).then((answer) => {
       this.quaternion = answer;
       console.debug(this.quaternion);
     });
     return this.quaternion;
   }
 
-  newQuaternion(event: SubmitEvent): number[] {
-    event.preventDefault();
-    invoke<[]>("get_new_quaternion", { vector: this.inputQuaternion }).then((answer) => {
+  newQuaternion(matrix: number[]): Quaternion {
+    invoke<Quaternion>("get_new_quaternion", { vector: matrix }).then((answer) => {
       this.quaternion = answer;
       console.debug(this.quaternion);
     });

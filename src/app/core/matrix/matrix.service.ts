@@ -8,26 +8,19 @@ export class MatrixService {
 
   constructor() { }
 
-  input: number[][] = [
-    [5, 3, 4],
-    [4, 5, 8],
-    [1, 3, 5]
-  ]
   matrix: number[][] = [];
 
-  multiplyMatrices(event: SubmitEvent): void {
-    event.preventDefault();
-    invoke<[]>("get_multiplied_matrix", { first_factor: this.input, second_factor: this.input }).then((answer) => {
+  multiplyMatrices(matrixOne: number[][], matrixTwo: number[][]): number[][] {
+    invoke<[]>("get_multiplied_matrix", { first_factor: matrixOne, second_factor: matrixTwo }).then((answer) => {
       this.matrix = answer;
-      console.debug(this.matrix);
     });
+    return this.matrix;
   }
 
-  addMatrices(event: SubmitEvent): void {
-    event.preventDefault();
-    invoke<[]>("get_added_matrix", { first_summand: this.input, second_summand: this.input }).then((answer) => {
+  addMatrices(matrixOne: number[][], matrixTwo: number[][]): number[][] {
+    invoke<[]>("get_added_matrix", { first_summand: matrixOne, second_summand: matrixTwo }).then((answer) => {
       this.matrix = answer;
-      console.debug(this.matrix);
-    })
+    });
+    return this.matrix;
   }
 }

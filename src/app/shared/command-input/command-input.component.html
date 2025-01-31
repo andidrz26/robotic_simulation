@@ -1,0 +1,46 @@
+<div class="mb-4 p-8 flex items-center justify-center">
+    <p-card>
+        <ng-template #title>
+            Math Equation
+        </ng-template>
+        <div class="flex items-center gap-4 mb-4">
+            <label class="font-semibold w-36">Type</label>
+            <p-select [options]="methods" [(ngModel)]="selectedMethod" [ngModelOptions]="{standalone: true}"></p-select>
+        </div>
+        <p-divider></p-divider>
+        <div *ngIf="selectedMethod == 'matrix'" class="flex items-center gap-4 mb-4">
+            <label class="font-semibold w-36">Matrix</label>
+            <div class="grid grid-cols-3 gap-2">
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[0][0]" placeholder="0"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[0][1]" placeholder="0"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[0][2]" placeholder="0"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[1][0]" placeholder="0"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[1][1]" placeholder="0"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[1][2]" placeholder="0"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][0]" placeholder="0"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][1]" placeholder="0"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][2]" placeholder="0"/>
+            </div>
+        </div>
+        <div *ngIf="selectedMethod == 'quaternion'" class="flex items-center gap-4 mb-4">
+            <label class="font-semibold w-36">Quaternion</label>
+            <div class="flex flex-col gap-2">
+                <input type="number" pInputText class="w-32" [(ngModel)]="quaternionInput" placeholder="scalar" />
+                <input type="number" pInputText class="w-32" [(ngModel)]="quaternionInput" placeholder="x" />
+                <input type="number" pInputText class="w-32" [(ngModel)]="quaternionInput" placeholder="y" />
+                <input type="number" pInputText class="w-32" [(ngModel)]="quaternionInput" placeholder="z" />
+            </div>
+        </div>
+        <div *ngIf="selectedMethod == 'euler'" class="flex items items-center gap-4 mb-4">
+            <label class="font-semibold w-36">Euler</label>
+            <div class="flex flex-col gap-2">
+                <input type="number" pInputText class="w-32" [(ngModel)]="eulerInput" placeholder="x" />
+                <input type="number" pInputText class="w-32" [(ngModel)]="eulerInput" placeholder="y" />
+                <input type="number" pInputText class="w-32" [(ngModel)]="eulerInput" placeholder="z" />
+            </div>
+        </div>
+        <ng-template #footer>
+            <button pButton type="button" label="Calculate" class="w-full mt-4 " (click)="calculate()"></button>
+        </ng-template>
+    </p-card>
+</div>

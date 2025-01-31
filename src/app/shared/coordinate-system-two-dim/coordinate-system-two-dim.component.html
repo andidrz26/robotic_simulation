@@ -1,11 +1,18 @@
-<div class="flex-container grid">
-    <div class="coordinate-system">
-        <div class="y-axis"></div>
-        <div class="x-axis"></div>
-        <div [ngClass]="{
-            'circle':(type === 'Sphere'),
-            'triangle':(type === 'Pyramid')
-            }" class="object">
+<div class="flex h-screen">
+    <div class="w-1/4">
+        <app-command-input></app-command-input>
+    </div>
+    <div class="w-3/4">
+        <div class="flex-container grid">
+            <div class="coordinate-system">
+                <div class="y-axis"></div>
+                <div class="x-axis"></div>
+                <div [ngClass]="{
+                    'circle':(type === 'Sphere'),
+                    'triangle':(type === 'Pyramid')
+                    }" class="object">
+                </div>
+            </div>
         </div>
     </div>
 </div>

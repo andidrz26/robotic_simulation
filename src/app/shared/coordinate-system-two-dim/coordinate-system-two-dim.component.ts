@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ProjectsService } from '../../core/project/projects.service';
 import { Project } from '../../core/project/project.model';
 import { CommonModule } from '@angular/common';
+import { CommandInputComponent } from "../command-input/command-input.component";
 
 @Component({
   selector: 'app-coordinate-system-two-dim',
-  imports: [CommonModule],
+  imports: [CommonModule, CommandInputComponent],
   templateUrl: './coordinate-system-two-dim.component.html',
   styleUrl: './coordinate-system-two-dim.component.scss'
 })
