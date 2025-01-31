@@ -45,16 +45,26 @@ export class CommandInputComponent implements OnInit {
   async calculate() {
     switch (this.selectedMethod) {
       case 'matrix':
+        this.matrix = await this.matrixService.addMatrices(this.matrix);
         this.projectService.setMatrix(this.matrix);
         break;
       case 'quaternion':
-        await this.quaternionService.newQuaternion(this.quaternionInput);
+        this.quaternion = await this.quaternionService.newQuaternion(this.quaternionInput);
+        this.quaternion = await this.quaternionService.slerpQuaternions(this.quaternion, 0.5);
         this.projectService.setQuaternion(this.quaternion);
+        this.matrix = await this.quaternionService.toRotationMatrix(this.quaternion);
+        this.projectService.setMatrix(this.matrix);
         break;
       case 'euler':
         await this.eulerService.newEuler(this.eulerAnglesInput);
         this.projectService.setEuler(this.eulerAngles);
+        await this.eulerService.toRotationMatrix(this.eulerAngles);
+        this.projectService.setMatrix(this.matrix);
+        break;
+      default:
+        console.error('Invalid method');
         break;
     }
+    console.info(this.matrix);
   }
 }

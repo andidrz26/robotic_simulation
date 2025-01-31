@@ -19,17 +19,38 @@ export class QuaternionService implements OnInit{
   }
 
   async newQuaternion(matrix: number[]): Promise<Quaternion> {
-    this.quaternion = await invoke<Quaternion>("get_new_quaternion", { vector: matrix });
-    return this.quaternion;
+    console.error(matrix);
+    const SCALAR = matrix[0];
+    matrix[1] *= SCALAR;
+    matrix[2] *= SCALAR;
+    matrix[3] *= SCALAR;
+    
+    return await invoke<Quaternion>("get_new_quaternion", { vector: matrix });
   }
 
   async addQuaternion(quaternion: Quaternion): Promise<Quaternion> {
-    this.quaternion = await invoke<Quaternion>("get_added_quaternion", { first_summand: this.quaternion, second_summand: quaternion });
-    return this.quaternion;
+    return await invoke<Quaternion>("get_added_quaternion", { first_summand: this.quaternion, second_summand: quaternion });
   }
 
   async multiplyQuaternions(quaternion: Quaternion): Promise<Quaternion> {
-    this.quaternion = await invoke<Quaternion>("get_multiplied_quaternion", { first_factor: this.quaternion, second_factor: quaternion });
-    return this.quaternion;
+    return await invoke<Quaternion>("get_multiplied_quaternion", { first_factor: this.quaternion, second_factor: quaternion });
+  }
+
+  async toRotationMatrix(quaternion: Quaternion): Promise<number[][]> {
+    const SCALAR = quaternion.scalar;
+    quaternion.vectorX *= SCALAR;
+    quaternion.vectorY *= SCALAR;
+    quaternion.vectorZ *= SCALAR;
+
+    return await invoke<number[][]>("get_rotation_matrix", { quaternion: quaternion });
+  }
+
+  async slerpQuaternions(quaternion: Quaternion, t: number): Promise<Quaternion> {
+    const SCALAR = quaternion.scalar;
+    quaternion.vectorX *= SCALAR;
+    quaternion.vectorY *= SCALAR;
+    quaternion.vectorZ *= SCALAR;
+
+    return await invoke<Quaternion>("get_slerp_quaternion", { first_factor: this.quaternion, second_factor: quaternion, t: t });
   }
 }

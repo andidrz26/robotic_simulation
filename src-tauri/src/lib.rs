@@ -110,6 +110,26 @@ fn get_multiplied_quaternion(
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
+fn get_rotation_matrix_from_quaternion(quaternion: Quaternion) -> Result<[[f64; 3]; 3], Error> {
+    match quaternion.to_rotation_matrix() {
+        Ok(value) => Ok(value),
+        Err(error) => Err(Error::Io(error)),
+    }
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
+fn get_slerp_quaternion(
+    first_factor: Quaternion,
+    second_factor: Quaternion,
+    t: f64,
+) -> Result<Quaternion, Error> {
+    match first_factor.slerp(t, second_factor) {
+        Ok(value) => Ok(value),
+        Err(error) => Err(Error::Io(error)),
+    }
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
 fn get_new_eulerangles(euler_angles: [f64; 3]) -> Result<algorithms::euler::EulerAngles, Error> {
     Ok(algorithms::euler::EulerAngles::new(
         euler_angles[0],
@@ -172,6 +192,8 @@ pub fn run() {
             get_new_quaternion,
             get_added_quaternion,
             get_multiplied_quaternion,
+            get_slerp_quaternion,
+            get_rotation_matrix_from_quaternion,
             get_new_eulerangles,
             get_from_rotation_matrix_eulerangles,
             get_to_rotation_matrix_eulerangles,
@@ -309,22 +331,25 @@ mod tests {
     }
 
     fn initialize_quaternions() -> Option<(Quaternion, Quaternion)> {
-        let first_summand: Quaternion = match Quaternion::new(1.0, 2.0, 3.0, 4.0) {
-            Ok(result) => result,
-            Err(error) => {
-                println!("Error: {:?}", error);
-                assert!(true, "Error: {:?}", error);
-                return None;
-            }
-        };
-        let second_summand: Quaternion = match Quaternion::new(5.0, 6.0, 7.0, 8.0) {
-            Ok(result) => result,
-            Err(error) => {
-                println!("Error: {:?}", error);
-                assert!(true, "Error: {:?}", error);
-                return None;
-            }
-        };
+        const SCALAR: f64 = 0.25 * (PI / 2.0);
+        let first_summand: Quaternion =
+            match Quaternion::new(SCALAR, 1.0 * SCALAR, 0.0 * SCALAR, 0.0 * SCALAR) {
+                Ok(result) => result,
+                Err(error) => {
+                    println!("Error: {:?}", error);
+                    assert!(true, "Error: {:?}", error);
+                    return None;
+                }
+            };
+        let second_summand: Quaternion =
+            match Quaternion::new(SCALAR, 0.0 * SCALAR, 1.0 * SCALAR, 0.0 * SCALAR) {
+                Ok(result) => result,
+                Err(error) => {
+                    println!("Error: {:?}", error);
+                    assert!(true, "Error: {:?}", error);
+                    return None;
+                }
+            };
         Some((first_summand, second_summand))
     }
 
@@ -334,14 +359,15 @@ mod tests {
             Some(value) => value,
             None => return,
         };
-        let asserted_result: Quaternion = match Quaternion::new(6.0, 8.0, 10.0, 12.0) {
-            Ok(result) => result,
-            Err(error) => {
-                println!("Error: {:?}", error);
-                assert!(true, "Error: {:?}", error);
-                return;
-            }
-        };
+        let asserted_result: Quaternion =
+            match Quaternion::new(0.7853981633974483, 0.39269908169872414, 0.39269908169872414, 0.0) {
+                Ok(result) => result,
+                Err(error) => {
+                    println!("Error: {:?}", error);
+                    assert!(true, "Error: {:?}", error);
+                    return;
+                }
+            };
         match first_summand.sum_of(second_summand) {
             Ok(result) => assert_eq!(result, asserted_result),
             Err(error) => {
@@ -357,7 +383,12 @@ mod tests {
             Some(value) => value,
             None => return,
         };
-        let asserted_result: Quaternion = match Quaternion::new(-60.0, 12.0, 30.0, 24.0) {
+        let asserted_result: Quaternion = match Quaternion::new(
+            0.15421256876702122,
+            0.15421256876702122,
+            0.15421256876702122,
+            0.15421256876702122,
+        ) {
             Ok(result) => result,
             Err(error) => {
                 println!("Error: {:?}", error);
@@ -366,6 +397,63 @@ mod tests {
             }
         };
         match first_factor.product_of(second_factor) {
+            Ok(result) => assert_eq!(result, asserted_result),
+            Err(error) => {
+                println!("Error: {:?}", error);
+                assert!(true, "Error: {:?}", error);
+            }
+        }
+    }
+
+    #[test]
+    fn test_quaternion_to_rotation_matrix() {
+        const SCALAR: f64 = 0.25 * (PI / 2.0);
+        let quaternion: Quaternion =
+            match Quaternion::new(SCALAR, 1.0 * SCALAR, 1.0 * SCALAR, 0.0 * SCALAR) {
+                Ok(result) => result,
+                Err(error) => {
+                    println!("Error: {:?}", error);
+                    return;
+                }
+            };
+        let asserted_result: [[f64; 3]; 3] = [
+            [0.6915748624659576, 0.30842513753404244, 0.30842513753404244],
+            [
+                0.30842513753404244,
+                0.6915748624659576,
+                -0.30842513753404244,
+            ],
+            [
+                -0.30842513753404244,
+                0.30842513753404244,
+                0.3831497249319151,
+            ],
+        ];
+        match quaternion.to_rotation_matrix() {
+            Ok(result) => {
+                assert_eq!(result, asserted_result);
+            }
+            Err(error) => {
+                println!("Error: {:?}", error);
+                assert!(true, "Error: {:?}", error);
+            }
+        }
+    }
+
+    #[test]
+    fn test_slerp_quaternion() {
+        let (first_factor, second_factor) = match initialize_quaternions() {
+            Some(value) => value,
+            None => return,
+        };
+        let asserted_result: Quaternion = match Quaternion::new(0.5169302937170552, 0.2584651468585276, 0.2584651468585276, 0.0) {
+            Ok(result) => result,
+            Err(error) => {
+                println!("Error: {:?}", error);
+                return;
+            }
+        };
+        match first_factor.slerp(0.5, second_factor) {
             Ok(result) => assert_eq!(result, asserted_result),
             Err(error) => {
                 println!("Error: {:?}", error);
@@ -424,7 +512,7 @@ mod tests {
 
     #[test]
     fn test_get_project() {
-        let file_path: &str = "test";
+        let file_path: &str = "blub";
         match load(&SETTINGS.savelocation, &file_path) {
             Ok(result) => assert!(true, "Result: {:?}", result),
             Err(error) => {
@@ -439,10 +527,7 @@ mod tests {
         match list_projects(&SETTINGS.savelocation) {
             Ok(result) => {
                 assert!(true, "Result: {:?}", result);
-                for project in result {
-                    println!("Project: {:?}", project);
-                }
-            },
+            }
             Err(error) => {
                 println!("Error: {:?}", error);
                 assert!(true, "Error: {:?}", error);
@@ -500,7 +585,7 @@ mod tests {
     fn test_post_settings() {
         let settings: Settings = Settings {
             theme: "light".to_string(),
-            savelocation: "../output".to_string(),
+            savelocation: "../output/".to_string(),
             saveonexit: true,
         };
 

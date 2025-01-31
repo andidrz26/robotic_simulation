@@ -8,29 +8,15 @@ import { ProjectsService } from '../project/projects.service';
 })
 export class EulerService {
 
-  eulerAngles: EulerAngles = {} as EulerAngles;
-
-  rotationMatrix: number[][] = [];
-
   async newEuler(inputVector: number[]): Promise<EulerAngles> {
-    this.eulerAngles = await invoke<EulerAngles>("get_new_euler", { vector: inputVector });
-    console.debug(this.eulerAngles);
-    return this.eulerAngles;
+    return await invoke<EulerAngles>("get_new_euler", { vector: inputVector });
   }
 
-  fromRotationMatrix(rotationMatrix: number[][]): EulerAngles {
-    invoke<EulerAngles>("get_euler_from_rotation_matrix", { matrix: rotationMatrix }).then((answer) => {
-      this.eulerAngles = answer;
-      console.debug(this.eulerAngles);
-    });
-    return this.eulerAngles;
+  async fromRotationMatrix(rotationMatrix: number[][]): Promise<EulerAngles> {
+    return await invoke<EulerAngles>("get_euler_from_rotation_matrix", { matrix: rotationMatrix });
   }
 
-  toRotationMatrix(eulerAngles: EulerAngles): number[][] {
-    invoke<[]>("get_rotation_matrix_from_euler", { vector: eulerAngles }).then((answer) => {
-      this.rotationMatrix = answer;
-      console.debug(this.rotationMatrix);
-    });
-    return this.rotationMatrix;
+  async toRotationMatrix(eulerAngles: EulerAngles): Promise<number[][]> {
+    return await invoke<[]>("get_rotation_matrix_from_euler", { vector: eulerAngles });
   }
 }

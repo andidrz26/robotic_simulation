@@ -37,6 +37,64 @@ impl Quaternion {
             Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"))
         }
     }
+
+    pub fn to_rotation_matrix(&self) -> Result<[[f64; 3]; 3], std::io::Error> {
+        let w = self.scalar;
+        let x = self.vector_x;
+        let y = self.vector_y;
+        let z = self.vector_z;
+
+        if !self.all_filled() {
+            Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"))
+        } else {
+            Ok([
+                [
+                    1.0 - 2.0 * (y * y + z * z),
+                    2.0 * (x * y - z * w),
+                    2.0 * (x * z + y * w),
+                ],
+                [
+                    2.0 * (x * y + z * w),
+                    1.0 - 2.0 * (x * x + z * z),
+                    2.0 * (y * z - x * w),
+                ],
+                [
+                    2.0 * (x * z - y * w),
+                    2.0 * (y * z + x * w),
+                    1.0 - 2.0 * (x * x + y * y),
+                ],
+            ])
+        }
+    }
+
+    pub fn slerp(&self, t: f64, end: Quaternion) -> Result<Quaternion, std::io::Error> {
+        if !self.all_filled() || !end.all_filled() {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"));
+        }
+
+        let dot = self.scalar * end.scalar
+            + self.vector_x * end.vector_x
+            + self.vector_y * end.vector_y
+            + self.vector_z * end.vector_z;
+
+        let dot = dot.clamp(-1.0, 1.0);
+
+        let theta_0 = dot.acos();
+        let theta = theta_0 * t;
+
+        let sin_theta = theta.sin();
+        let sin_theta_0 = theta_0.sin();
+
+        let s0 = (theta.cos() - dot * sin_theta / sin_theta_0).clamp(-1.0, 1.0);
+        let s1 = (sin_theta / sin_theta_0).clamp(-1.0, 1.0);
+
+        Ok(Quaternion {
+            scalar: s0 * self.scalar + s1 * end.scalar,
+            vector_x: s0 * self.vector_x + s1 * end.vector_x,
+            vector_y: s0 * self.vector_y + s1 * end.vector_y,
+            vector_z: s0 * self.vector_z + s1 * end.vector_z,
+        })
+    }
 }
 
 fn add(first_quaternion: &Quaternion, second_quaternion: &Quaternion) -> Quaternion {
