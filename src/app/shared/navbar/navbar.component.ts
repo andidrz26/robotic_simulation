@@ -21,6 +21,10 @@ export class NavbarComponent implements OnInit {
   items: MenuItem[] | undefined;
 
   ngOnInit() {
+    document.addEventListener('contextmenu', function (event) {
+      event.preventDefault();
+    });
+
     this.settings.getSettingsFromFile();
 
     this.items = [

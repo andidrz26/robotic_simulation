@@ -23,7 +23,7 @@ import { EulerAngles } from '../../core/euler/euler_angles.model';
 })
 export class CommandInputComponent implements OnInit {
 
-  constructor(private projectService: ProjectsService, private matrixService: MatrixService, 
+  constructor(private projectService: ProjectsService, private matrixService: MatrixService,
     private quaternionService: QuaternionService, private eulerService: EulerService) { }
 
   project: Project = {} as Project;
@@ -39,19 +39,21 @@ export class CommandInputComponent implements OnInit {
   matrix: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
   quaternionInput!: number[];
   quaternion: Quaternion = {} as Quaternion;
-  eulerInput!: number[];
-  euler: EulerAngles = {} as EulerAngles;
+  eulerAnglesInput!: number[];
+  eulerAngles: EulerAngles = {} as EulerAngles;
 
   calculate() {
     switch (this.selectedMethod) {
       case 'matrix':
-        //placeholder
+        this.projectService.setMatrix(this.matrix);
         break;
       case 'quaternion':
         this.quaternionService.newQuaternion(this.quaternionInput);
+        this.projectService.setQuaternion(this.quaternion);
         break;
       case 'euler':
-        this.eulerService.newEuler(this.eulerInput);
+        this.eulerService.newEuler(this.eulerAnglesInput);
+        this.projectService.setEuler(this.eulerAngles);
         break;
     }
   }

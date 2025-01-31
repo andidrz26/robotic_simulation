@@ -3,6 +3,8 @@ import { ProjectsService } from '../../core/project/projects.service';
 import { Project } from '../../core/project/project.model';
 import { CommonModule } from '@angular/common';
 import { CommandInputComponent } from "../command-input/command-input.component";
+import { Quaternion } from '../../core/quaternion/quaternion.model';
+import { EulerAngles } from '../../core/euler/euler_angles.model';
 
 @Component({
   selector: 'app-coordinate-system-two-dim',
@@ -16,12 +18,23 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
 
   selectedProject: Project = {} as Project;
   type: String = 'Cube';
+  matrix: number[][] = [];
+  quaternion: Quaternion = {} as Quaternion;
+  eulerAngles: EulerAngles = {} as EulerAngles;
 
   ngOnInit(): void {
     this.projectsService.currentProject$.subscribe((project) => {
       this.selectedProject = project;
       this.type = project.object.types;
-      console.log('Selected project:', this.selectedProject);
+    });
+    this.projectsService.currentMatrix$.subscribe((matrix) => {
+      this.matrix = matrix;
+    });
+    this.projectsService.currentQuaternion$.subscribe((quaternion) => {
+      this.quaternion = quaternion;
+    });
+    this.projectsService.currentEuler$.subscribe((euler) => {
+      this.eulerAngles = euler;
     });
   } 
 }

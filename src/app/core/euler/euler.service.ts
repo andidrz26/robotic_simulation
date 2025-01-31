@@ -12,11 +12,9 @@ export class EulerService {
   eulerAngles: EulerAngles[] = [];
   rotationMatrix: number[][] = [];
 
-  newEuler(inputVector: number[]): EulerAngles[] {
-    invoke<[]>("get_new_euler", { vector: inputVector }).then((answer) => {
-      this.eulerAngles = answer;
-      console.debug(this.eulerAngles);
-    });
+  async newEuler(inputVector: number[]): Promise<EulerAngles[]> {
+    this.eulerAngles = await invoke<[]>("get_new_euler", { vector: inputVector });
+    console.debug(this.eulerAngles);
     return this.eulerAngles;
   }
 
