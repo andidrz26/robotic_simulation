@@ -1,34 +1,35 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { invoke } from '@tauri-apps/api/core';
 import { Quaternion } from './quaternion.model';
+import { ProjectsService } from '../project/projects.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class QuaternionService {
+export class QuaternionService implements OnInit{
 
-  constructor() { }
+  constructor(private projectService: ProjectsService) { }
 
   quaternion: Quaternion = {} as Quaternion;
+
+  ngOnInit(): void {
+    this.projectService.currentQuaternion$.subscribe((quaternion) => {
+      this.quaternion = quaternion;
+    });
+  }
 
   async newQuaternion(matrix: number[]): Promise<Quaternion> {
     this.quaternion = await invoke<Quaternion>("get_new_quaternion", { vector: matrix });
     return this.quaternion;
   }
 
-  addQuaternion(quaternionOne: Quaternion, quaternionTwo: Quaternion): Quaternion {
-    invoke<Quaternion>("get_added_quaternion", { first_summand: quaternionOne, second_summand: quaternionTwo }).then((answer) => {
-      this.quaternion = answer;
-      console.debug(this.quaternion);
-    })
+  async addQuaternion(quaternion: Quaternion): Promise<Quaternion> {
+    this.quaternion = await invoke<Quaternion>("get_added_quaternion", { first_summand: this.quaternion, second_summand: quaternion });
     return this.quaternion;
   }
 
-  multiplyQuaternions(quaternionOne: Quaternion, quaternionTwo: Quaternion): Quaternion {
-    invoke<Quaternion>("get_multiplied_quaternion", { first_factor: quaternionOne, second_factor: quaternionTwo }).then((answer) => {
-      this.quaternion = answer;
-      console.debug(this.quaternion);
-    });
+  async multiplyQuaternions(quaternion: Quaternion): Promise<Quaternion> {
+    this.quaternion = await invoke<Quaternion>("get_multiplied_quaternion", { first_factor: this.quaternion, second_factor: quaternion });
     return this.quaternion;
   }
 }

@@ -1,25 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { invoke } from '@tauri-apps/api/core';
 import { EulerAngles } from './euler_angles.model';
+import { ProjectsService } from '../project/projects.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EulerService {
 
-  constructor() { }
+  eulerAngles: EulerAngles = {} as EulerAngles;
 
-  eulerAngles: EulerAngles[] = [];
   rotationMatrix: number[][] = [];
 
-  async newEuler(inputVector: number[]): Promise<EulerAngles[]> {
-    this.eulerAngles = await invoke<[]>("get_new_euler", { vector: inputVector });
+  async newEuler(inputVector: number[]): Promise<EulerAngles> {
+    this.eulerAngles = await invoke<EulerAngles>("get_new_euler", { vector: inputVector });
     console.debug(this.eulerAngles);
     return this.eulerAngles;
   }
 
-  fromRotationMatrix(rotationMatrix: number[][]): EulerAngles[] {
-    invoke<[]>("get_euler_from_rotation_matrix", { matrix: rotationMatrix }).then((answer) => {
+  fromRotationMatrix(rotationMatrix: number[][]): EulerAngles {
+    invoke<EulerAngles>("get_euler_from_rotation_matrix", { matrix: rotationMatrix }).then((answer) => {
       this.eulerAngles = answer;
       console.debug(this.eulerAngles);
     });

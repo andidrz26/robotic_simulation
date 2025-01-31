@@ -29,13 +29,22 @@ export class ProjectsService {
   private currentProjectSubject: BehaviorSubject<Project> = new BehaviorSubject<Project>({} as Project);
   public currentProject$: Observable<Project> = this.currentProjectSubject.asObservable();
 
-  private currentMatrixSubject: BehaviorSubject<number[][]> = new BehaviorSubject<number[][]>([]);
+  private currentMatrixSubject: BehaviorSubject<number[][]> = new BehaviorSubject<number[][]>([[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
   public currentMatrix$: Observable<number[][]> = this.currentMatrixSubject.asObservable();
 
-  private currentQuaternionSubject: BehaviorSubject<Quaternion> = new BehaviorSubject<Quaternion>({} as Quaternion);
+  private currentQuaternionSubject: BehaviorSubject<Quaternion> = new BehaviorSubject<Quaternion>({
+    scalar: 0,
+    vectorX: 0,
+    vectorY: 0,
+    vectorZ: 0
+  });
   public currentQuaternion$: Observable<Quaternion> = this.currentQuaternionSubject.asObservable();
 
-  private currentEulerSubject: BehaviorSubject<EulerAngles> = new BehaviorSubject<EulerAngles>({} as EulerAngles);
+  private currentEulerSubject: BehaviorSubject<EulerAngles> = new BehaviorSubject<EulerAngles>({
+    yaw: 0,
+    pitch: 0,
+    roll: 0
+  });
   public currentEuler$: Observable<EulerAngles> = this.currentEulerSubject.asObservable();
 
   loadProjects(): void {
@@ -70,7 +79,7 @@ export class ProjectsService {
     this.currentMatrixSubject.next(matrix);
   }
 
-  setQuaternion(quaternion: Quaternion): void { 
+  setQuaternion(quaternion: Quaternion): void {
     this.currentQuaternionSubject.next(quaternion);
   }
 

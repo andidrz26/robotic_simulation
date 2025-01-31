@@ -42,20 +42,19 @@ export class CommandInputComponent implements OnInit {
   eulerAnglesInput!: number[];
   eulerAngles: EulerAngles = {} as EulerAngles;
 
-  calculate() {
+  async calculate() {
     switch (this.selectedMethod) {
       case 'matrix':
         this.projectService.setMatrix(this.matrix);
         break;
       case 'quaternion':
-        this.quaternionService.newQuaternion(this.quaternionInput);
+        await this.quaternionService.newQuaternion(this.quaternionInput);
         this.projectService.setQuaternion(this.quaternion);
         break;
       case 'euler':
-        this.eulerService.newEuler(this.eulerAnglesInput);
+        await this.eulerService.newEuler(this.eulerAnglesInput);
         this.projectService.setEuler(this.eulerAngles);
         break;
     }
   }
-
 }

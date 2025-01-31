@@ -1,26 +1,29 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { invoke } from '@tauri-apps/api/core';
+import { ProjectsService } from '../project/projects.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MatrixService {
+export class MatrixService implements OnInit{
 
-  constructor() { }
+  constructor(private projectService: ProjectsService) { }
 
   matrix: number[][] = [];
 
-  multiplyMatrices(matrixOne: number[][], matrixTwo: number[][]): number[][] {
-    invoke<[]>("get_multiplied_matrix", { first_factor: matrixOne, second_factor: matrixTwo }).then((answer) => {
-      this.matrix = answer;
+  ngOnInit(): void {
+    this.projectService.currentMatrix$.subscribe((matrix) => {
+      this.matrix = matrix;
     });
+  }
+
+  async multiplyMatrices(matrix: number[][]): Promise<number[][]> {
+    this.matrix = await invoke<[]>("get_multiplied_matrix", { first_factor: this.matrix, second_factor: matrix });
     return this.matrix;
   }
 
-  addMatrices(matrixOne: number[][], matrixTwo: number[][]): number[][] {
-    invoke<[]>("get_added_matrix", { first_summand: matrixOne, second_summand: matrixTwo }).then((answer) => {
-      this.matrix = answer;
-    });
+  async addMatrices(matrix: number[][]): Promise<number[][]> {
+    this.matrix = await invoke<[]>("get_added_matrix", { first_summand: this.matrix, second_summand: matrix });
     return this.matrix;
   }
 }
