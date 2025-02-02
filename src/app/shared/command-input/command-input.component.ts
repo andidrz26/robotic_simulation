@@ -37,10 +37,11 @@ export class CommandInputComponent implements OnInit {
   methods: String[] = ['matrix', 'quaternion', 'euler'];
   selectedMethod: String = 'matrix';
   matrix: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
-  quaternionInput!: number[];
+  quaternionInput: number[] = [];
   quaternion: Quaternion = {} as Quaternion;
-  eulerAnglesInput!: number[];
+  eulerAnglesInput: number[] = [];
   eulerAngles: EulerAngles = {} as EulerAngles;
+  solution: boolean = false;
 
   async calculate() {
     switch (this.selectedMethod) {
@@ -58,13 +59,13 @@ export class CommandInputComponent implements OnInit {
       case 'euler':
         await this.eulerService.newEuler(this.eulerAnglesInput);
         this.projectService.setEuler(this.eulerAngles);
-        await this.eulerService.toRotationMatrix(this.eulerAngles);
+        this.matrix = await this.eulerService.toRotationMatrix(this.eulerAngles);
         this.projectService.setMatrix(this.matrix);
         break;
       default:
         console.error('Invalid method');
         break;
     }
-    console.info(this.matrix);
+    this.solution = true;
   }
 }

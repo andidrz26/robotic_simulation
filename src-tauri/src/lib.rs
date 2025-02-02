@@ -6,7 +6,7 @@ pub mod algorithms {
 }
 use std::sync::LazyLock;
 
-use algorithms::matrix::{product_of, sum_of};
+use algorithms::matrix::{product_of, sum_of, transpose};
 use algorithms::quaternion::quaternion::Quaternion;
 use algorithms::vector;
 use algorithms::vector::{cross_product_of, scalar_product_of};
@@ -56,6 +56,14 @@ fn get_added_matrix(
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
+fn get_transposed_matrix(matrix: Vec<Vec<f64>>) -> Result<Vec<Vec<f64>>, Error> {
+    match transpose(matrix) {
+        Ok(value) => Ok(value),
+        Err(error) => Err(Error::Io(error)),    
+    }
+}
+
+#[tauri::command(async, rename_all = "snake_case")]
 fn get_added_vector(first_summand: Vec<f64>, second_summand: Vec<f64>) -> Result<Vec<f64>, Error> {
     match vector::sum_of(first_summand, second_summand) {
         Ok(value) => Ok(value),
@@ -80,8 +88,8 @@ fn get_scalar_product(first_factor: Vec<f64>, second_factor: Vec<f64>) -> Result
 }
 
 #[tauri::command(async, rename_all = "snake_case")]
-fn get_new_quaternion() -> Result<Quaternion, Error> {
-    match Quaternion::new(1.0, 2.0, 3.0, 4.0) {
+fn get_new_quaternion(vector: [f64; 4]) -> Result<Quaternion, Error> {
+    match Quaternion::new(vector[0], vector[1], vector[2], vector[3]) {
         Ok(value) => Ok(value),
         Err(error) => Err(Error::Io(error)),
     }
@@ -186,6 +194,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             get_multiplied_matrix,
             get_added_matrix,
+            get_transposed_matrix,
             get_added_vector,
             get_cross_product,
             get_scalar_product,

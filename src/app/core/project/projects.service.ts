@@ -34,9 +34,9 @@ export class ProjectsService {
 
   private currentQuaternionSubject: BehaviorSubject<Quaternion> = new BehaviorSubject<Quaternion>({
     scalar: 0,
-    vectorX: 0,
-    vectorY: 0,
-    vectorZ: 0
+    vector_x: 0,
+    vector_y: 0,
+    vector_z: 0
   });
   public currentQuaternion$: Observable<Quaternion> = this.currentQuaternionSubject.asObservable();
 

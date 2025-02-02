@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { CommandInputComponent } from "../command-input/command-input.component";
 import { Quaternion } from '../../core/quaternion/quaternion.model';
 import { EulerAngles } from '../../core/euler/euler_angles.model';
+import { QuaternionService } from '../../core/quaternion/quaternion.service';
 
 @Component({
   selector: 'app-coordinate-system-two-dim',
@@ -14,7 +15,7 @@ import { EulerAngles } from '../../core/euler/euler_angles.model';
 })
 export class CoordinateSystemTwoDimComponent implements OnInit {
  
-  constructor(private projectsService: ProjectsService) { }
+  constructor(private projectsService: ProjectsService, private quaternionService: QuaternionService) { }
 
   selectedProject: Project = {} as Project;
   type: String = 'Cube';

@@ -1,6 +1,6 @@
 export interface Quaternion {
     scalar: number;
-    vectorX: number;
-    vectorY: number;
-    vectorZ: number;
+    vector_x: number;
+    vector_y: number;
+    vector_z: number;
 }

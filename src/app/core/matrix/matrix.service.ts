@@ -26,4 +26,9 @@ export class MatrixService implements OnInit{
     this.matrix = await invoke<[]>("get_added_matrix", { first_summand: this.matrix, second_summand: matrix });
     return this.matrix;
   }
+
+  async transposeMatrix(matrix: number[][]): Promise<number[][]> {
+    this.matrix = await invoke<[]>("get_transposed_matrix", { matrix: matrix });
+    return this.matrix;
+  }
 }

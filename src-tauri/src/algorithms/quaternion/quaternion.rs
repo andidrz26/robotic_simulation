@@ -17,7 +17,7 @@ impl Quaternion {
     }
 
     fn all_filled(&self) -> bool {
-        *self != Quaternion::default() 
+        self.scalar.is_finite() && self.vector_x.is_finite() && self.vector_y.is_finite() && self.vector_z.is_finite()
     }
 
     pub fn sum_of(&self, second_summand: Quaternion) -> Result<Quaternion, std::io::Error> {
@@ -49,19 +49,19 @@ impl Quaternion {
         } else {
             Ok([
                 [
-                    1.0 - 2.0 * (y * y + z * z),
-                    2.0 * (x * y - z * w),
-                    2.0 * (x * z + y * w),
+                    (1.0 - 2.0 * (y * y + z * z)),
+                    (2.0 * (x * y - z * w)),
+                    (2.0 * (x * z + y * w)),
                 ],
                 [
-                    2.0 * (x * y + z * w),
-                    1.0 - 2.0 * (x * x + z * z),
-                    2.0 * (y * z - x * w),
+                    (2.0 * (x * y + z * w)),
+                    (1.0 - 2.0 * (x * x + z * z)),
+                    (2.0 * (y * z - x * w)),
                 ],
                 [
-                    2.0 * (x * z - y * w),
-                    2.0 * (y * z + x * w),
-                    1.0 - 2.0 * (x * x + y * y),
+                    (2.0 * (x * z - y * w)),
+                    (2.0 * (y * z + x * w)),
+                    (1.0 - 2.0 * (x * x + y * y)),
                 ],
             ])
         }
@@ -69,7 +69,7 @@ impl Quaternion {
 
     pub fn slerp(&self, t: f64, end: Quaternion) -> Result<Quaternion, std::io::Error> {
         if !self.all_filled() || !end.all_filled() {
-            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Error: Input data not valid"));
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Input data not valid"));
         }
 
         let dot = self.scalar * end.scalar

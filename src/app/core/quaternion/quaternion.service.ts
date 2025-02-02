@@ -6,26 +6,19 @@ import { ProjectsService } from '../project/projects.service';
 @Injectable({
   providedIn: 'root'
 })
-export class QuaternionService implements OnInit{
+export class QuaternionService {
 
   constructor(private projectService: ProjectsService) { }
 
   quaternion: Quaternion = {} as Quaternion;
 
-  ngOnInit(): void {
-    this.projectService.currentQuaternion$.subscribe((quaternion) => {
-      this.quaternion = quaternion;
-    });
-  }
-
-  async newQuaternion(matrix: number[]): Promise<Quaternion> {
-    console.error(matrix);
-    const SCALAR = matrix[0];
-    matrix[1] *= SCALAR;
-    matrix[2] *= SCALAR;
-    matrix[3] *= SCALAR;
+  async newQuaternion(vector: number[]): Promise<Quaternion> {
+    const SCALAR = vector[0];
+    vector[1] *= SCALAR;
+    vector[2] *= SCALAR;
+    vector[3] *= SCALAR;
     
-    return await invoke<Quaternion>("get_new_quaternion", { vector: matrix });
+    return await invoke<Quaternion>("get_new_quaternion", { vector: vector });
   }
 
   async addQuaternion(quaternion: Quaternion): Promise<Quaternion> {
@@ -38,19 +31,17 @@ export class QuaternionService implements OnInit{
 
   async toRotationMatrix(quaternion: Quaternion): Promise<number[][]> {
     const SCALAR = quaternion.scalar;
-    quaternion.vectorX *= SCALAR;
-    quaternion.vectorY *= SCALAR;
-    quaternion.vectorZ *= SCALAR;
+    quaternion.vector_x *= SCALAR;
+    quaternion.vector_y *= SCALAR;
+    quaternion.vector_z *= SCALAR;
 
-    return await invoke<number[][]>("get_rotation_matrix", { quaternion: quaternion });
+    return await invoke<number[][]>("get_rotation_matrix_from_quaternion", { quaternion: quaternion });
   }
 
   async slerpQuaternions(quaternion: Quaternion, t: number): Promise<Quaternion> {
-    const SCALAR = quaternion.scalar;
-    quaternion.vectorX *= SCALAR;
-    quaternion.vectorY *= SCALAR;
-    quaternion.vectorZ *= SCALAR;
-
+    this.projectService.currentQuaternion$.subscribe((quaternion) => {
+      this.quaternion = quaternion;
+    });
     return await invoke<Quaternion>("get_slerp_quaternion", { first_factor: this.quaternion, second_factor: quaternion, t: t });
   }
 }

@@ -8,20 +8,6 @@
             <p-select [options]="methods" [(ngModel)]="selectedMethod" [ngModelOptions]="{standalone: true}"></p-select>
         </div>
         <p-divider></p-divider>
-        <div *ngIf="selectedMethod == 'matrix'" class="flex items-center gap-4 mb-4">
-            <label class="font-semibold w-36">Matrix</label>
-            <div class="grid grid-cols-3 gap-2">
-                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[0][0]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
-                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[0][1]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
-                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[0][2]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
-                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[1][0]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
-                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[1][1]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
-                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[1][2]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
-                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][0]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
-                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][1]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
-                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][2]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
-            </div>
-        </div>
         <div *ngIf="selectedMethod == 'quaternion'" class="flex items-center gap-4 mb-4">
             <label class="font-semibold w-36">Quaternion</label>
             <div class="flex flex-col gap-2">
@@ -37,6 +23,20 @@
                 <input type="number" pInputText class="w-32" [(ngModel)]="eulerAnglesInput[0]" placeholder="x" [ngModelOptions]="{standalone: true}"/>
                 <input type="number" pInputText class="w-32" [(ngModel)]="eulerAnglesInput[1]" placeholder="y" [ngModelOptions]="{standalone: true}"/>
                 <input type="number" pInputText class="w-32" [(ngModel)]="eulerAnglesInput[2]" placeholder="z" [ngModelOptions]="{standalone: true}"/>
+            </div>
+        </div>
+        <div *ngIf="selectedMethod == 'matrix' || solution" class="flex items-center gap-4 mb-4">
+            <label class="font-semibold w-36">Matrix</label>
+            <div class="grid grid-cols-3 gap-2">
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[0][0]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[0][1]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[0][2]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[1][0]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[1][1]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[1][2]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][0]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][1]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][2]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
             </div>
         </div>
         <ng-template #footer>

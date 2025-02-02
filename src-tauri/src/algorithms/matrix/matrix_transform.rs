@@ -46,33 +46,39 @@ fn cofactor_matrix(matrix: [[f64; 4]; 4]) -> [[f64; 4]; 4] {
     cofactor
 }
 
-pub fn transpose(matrix: Vec<Vec<f64>>) -> Option<Vec<Vec<f64>>> {
+pub fn transpose(matrix: Vec<Vec<f64>>) -> Result<Vec<Vec<f64>>, std::io::Error> {
     let rows: usize = matrix.len();
     let cols: usize = matrix[0].len();
 
     if rows != 0 && cols != 0 && rows == cols {
-        let mut transposed_matrix: Vec<Vec<f64>> = vec![vec![0.0, rows as f64]; cols];
+        let mut transposed_matrix: Vec<Vec<f64>> = vec![vec![0.0; rows]; cols];
         for i in 0..rows {
             for j in 0..cols {
                 transposed_matrix[j][i] = matrix[i][j];
             }
         }
-        Some(transposed_matrix)
+        Ok(transposed_matrix)
     } else {
-        None
+        Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "Invalid matrix dimensions",
+        ))
     }
 }
 
-pub fn invert_4x4(matrix: [[f64; 4]; 4]) -> Option<[[f64; 4]; 4]> {
+pub fn invert_4x4(matrix: [[f64; 4]; 4]) -> Result<[[f64; 4]; 4], std::io::Error> {
     let det: f64 = determinant_4x4(matrix);
     if det.abs() < 1e-10 {
-        None
+        Err(std::io::Error::new(
+            std::io::ErrorKind::InvalidInput,
+            "Matrix is singular",
+        ))
     } else {
         let cofactor: [[f64; 4]; 4] = cofactor_matrix(matrix);
         let adjugate: Vec<Vec<f64>>;
         match transpose(cofactor.iter().map(|row: &[f64; 4]| row.to_vec()).collect()) {
-            Some(result) => adjugate = result,
-            None => return None,
+            Ok(result) => adjugate = result,
+            Err(error) => return Err(error),
         }
         let mut inverse: [[f64; 4]; 4] = [[0.0; 4]; 4];
 
@@ -81,6 +87,6 @@ pub fn invert_4x4(matrix: [[f64; 4]; 4]) -> Option<[[f64; 4]; 4]> {
                 inverse[i][j] = adjugate[i][j] / det;
             }
         }
-        Some(inverse)
+        Ok(inverse)
     }
 }
