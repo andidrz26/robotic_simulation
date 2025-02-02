@@ -9,12 +9,13 @@ import { QuaternionService } from '../../core/quaternion/quaternion.service';
 
 @Component({
   selector: 'app-coordinate-system-two-dim',
+  standalone: true,
   imports: [CommonModule, CommandInputComponent],
   templateUrl: './coordinate-system-two-dim.component.html',
-  styleUrl: './coordinate-system-two-dim.component.scss'
+  styleUrls: ['./coordinate-system-two-dim.component.scss']
 })
 export class CoordinateSystemTwoDimComponent implements OnInit {
- 
+
   constructor(private projectsService: ProjectsService, private quaternionService: QuaternionService) { }
 
   selectedProject: Project = {} as Project;
@@ -24,12 +25,20 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
   eulerAngles: EulerAngles = {} as EulerAngles;
 
   ngOnInit(): void {
+    let first: boolean = true;
     this.projectsService.currentProject$.subscribe((project) => {
-      this.selectedProject = project;
-      this.type = project.object.types;
+      if (project.object != undefined) {
+        this.selectedProject = project;
+        this.type = project.object.types;
+      }
     });
     this.projectsService.currentMatrix$.subscribe((matrix) => {
       this.matrix = matrix;
+      if(!first) {
+        this.update2DObject();
+      } else {
+        first = false;
+      }
     });
     this.projectsService.currentQuaternion$.subscribe((quaternion) => {
       this.quaternion = quaternion;
@@ -37,5 +46,31 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
     this.projectsService.currentEuler$.subscribe((euler) => {
       this.eulerAngles = euler;
     });
-  } 
-}
+  }
+
+  update2DObject(): void {
+    const div = document.getElementById('spinDiv');
+    if (div) {
+      let twoDMatrix: number[][];
+      if (this.matrix.length == 3) {
+        twoDMatrix = [
+          [this.matrix[0][0], this.matrix[0][1]],
+          [this.matrix[1][0], this.matrix[1][1]],
+          [this.matrix[2][0], this.matrix[2][1]]
+        ];
+      } else {
+        twoDMatrix = [
+          [this.matrix[0][0], this.matrix[0][1]],
+          [this.matrix[1][0], this.matrix[1][1]],
+          [this.matrix[0][3], this.matrix[1][3]]
+        ];
+      }
+      // Ensure the scaling is not changing by setting the scale values to 1
+      twoDMatrix[0][0] = 1; // scaleX
+      twoDMatrix[1][1] = 1; // scaleY
+
+      const matrixString = twoDMatrix.join(',');
+      div.style.transform = `matrix(${matrixString})`;
+    }
+  }
+} 

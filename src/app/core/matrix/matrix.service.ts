@@ -9,7 +9,7 @@ export class MatrixService implements OnInit{
 
   constructor(private projectService: ProjectsService) { }
 
-  matrix: number[][] = [];
+  matrix: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
 
   ngOnInit(): void {
     this.projectService.currentMatrix$.subscribe((matrix) => {

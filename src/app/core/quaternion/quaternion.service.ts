@@ -17,7 +17,7 @@ export class QuaternionService {
     vector[1] *= SCALAR;
     vector[2] *= SCALAR;
     vector[3] *= SCALAR;
-    
+
     return await invoke<Quaternion>("get_new_quaternion", { vector: vector });
   }
 

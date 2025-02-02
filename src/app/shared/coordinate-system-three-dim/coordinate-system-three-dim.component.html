@@ -1,7 +1,28 @@
-<div class="coordinate-system-three-dim">
-    <div class="cube show-top-right">
-        <div class="cube__face cube__face--back grid"></div>
-        <div class="cube__face cube__face--left grid"></div>
-        <div class="cube__face cube__face--bottom grid"></div>
+<div class="flex h-screen">
+    <div class="w-1/4">
+        <app-command-input></app-command-input>
+    </div>
+    <div class="w-3/4 coordinate-system-three-dim">
+        <div class="cube show-top-right">
+            <div class="cube__face cube__face--back grid"></div>
+            <div class="cube__face cube__face--left grid"></div>
+            <div class="cube__face cube__face--bottom grid"></div>
+            <div id="cube" *ngIf="type == 'Cube'" class="small-cube">
+                <div class="small-cube__face small-cube__face--back"></div>
+                <div class="small-cube__face small-cube__face--left"></div>
+                <div class="small-cube__face small-cube__face--bottom"></div>
+                <div class="small-cube__face small-cube__face--right"></div>
+                <div class="small-cube__face small-cube__face--top"></div>
+                <div class="small-cube__face small-cube__face--front"></div>
+            </div>
+            <div id="sphere" *ngIf="type == 'Sphere'" class="sphere"></div>
+            <div id="pyramid" *ngIf="type == 'Pyramid'" class="pyramid">
+                <div class="side one"></div>
+                <div class="side two"></div>
+                <div class="side three"></div>
+                <div class="side four"></div>
+                <div class="base"></div>
+            </div>
+        </div>
     </div>
 </div>

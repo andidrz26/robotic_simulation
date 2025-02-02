@@ -35,7 +35,7 @@ export class CommandInputComponent implements OnInit {
   }
 
   methods: String[] = ['matrix', 'quaternion', 'euler'];
-  selectedMethod: String = 'matrix';
+  selectedMethod: String = 'quaternion';
   matrix: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
   quaternionInput: number[] = [];
   quaternion: Quaternion = {} as Quaternion;
@@ -50,10 +50,18 @@ export class CommandInputComponent implements OnInit {
         this.projectService.setMatrix(this.matrix);
         break;
       case 'quaternion':
+        let x = this.quaternionInput[0];
+        let y = this.quaternionInput[1];
+        let z = this.quaternionInput[2];
         this.quaternion = await this.quaternionService.newQuaternion(this.quaternionInput);
-        this.quaternion = await this.quaternionService.slerpQuaternions(this.quaternion, 0.5);
+        this.quaternion = await this.quaternionService.slerpQuaternions(this.quaternion, 1);
         this.projectService.setQuaternion(this.quaternion);
         this.matrix = await this.quaternionService.toRotationMatrix(this.quaternion);
+        this.matrix = await this.matrixService.transposeMatrix(this.matrix);
+        this.matrix[0][3] = x;
+        this.matrix[1][3] = y;
+        this.matrix[2][3] = z;
+        this.matrix[3] = [0, 0, 0, 1];
         this.projectService.setMatrix(this.matrix);
         break;
       case 'euler':
