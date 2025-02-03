@@ -15,6 +15,10 @@
     transform: translateZ(-100px);
 }
 
+.height-full {
+    height: calc(100vh - 58px);
+}
+
 .cube.show-top-right {
     transform: translateZ(-100px) rotateY(-15deg) rotateX(-15deg);
 }
