@@ -40,6 +40,7 @@ export class CommandInputComponent implements OnInit {
   quaternionInput: number[] = [];
   quaternion: Quaternion = {} as Quaternion;
   eulerAnglesInput: number[] = [];
+  vector: number[] = [];
   eulerAngles: EulerAngles = {} as EulerAngles;
   solution: boolean = false;
 
@@ -47,6 +48,10 @@ export class CommandInputComponent implements OnInit {
     switch (this.selectedMethod) {
       case 'matrix':
         this.matrix = await this.matrixService.addMatrices(this.matrix);
+        this.matrix[0][3] = this.vector[0];
+        this.matrix[1][3] = this.vector[1];
+        this.matrix[2][3] = this.vector[2];
+        this.matrix[3] = [0, 0, 0, 1];
         this.projectService.setMatrix(this.matrix);
         break;
       case 'quaternion':

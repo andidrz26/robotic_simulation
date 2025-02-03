@@ -17,10 +17,24 @@ import { ProjectsService } from '../../core/project/projects.service';
   templateUrl: './create-object.component.html',
   styleUrls: ['./create-object.component.scss']
 })
-export class CreateObjectComponent {
+export class CreateObjectComponent implements OnInit{
 
   constructor(private messageService: MessageService, private projectsService: ProjectsService) { }
 
+  ngOnInit(): void {
+    if(window.location.pathname.includes('change'))
+    this.projectsService.currentProject$.subscribe((project) => {
+      this.object = project.object;
+      this.name = project.name;
+      this.selectedType = project.object.types;
+      this.dimension = project.object.dimension;
+      this.height = project.object.height;
+      this.width = project.object.width;
+      this.depth = project.object.depth;
+    });
+  }
+
+  object: Object = {} as Object;
   header: string = 'Object Creation';
 
   // List of implemented object types
@@ -41,8 +55,6 @@ export class CreateObjectComponent {
     this.depth = undefined;
     this.name = '';
   }
-
-  object: Object | undefined;
 
   save() {
     let severity = 'info';

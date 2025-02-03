@@ -6,6 +6,8 @@ import { RippleModule } from 'primeng/ripple';
 import { Router } from '@angular/router';
 import { NavbarControllService } from '../../core/navbar-controll.service';
 import { SettingsService } from '../../core/settings/settings.service';
+import { ProjectsService } from '../../core/project/projects.service';
+import { Project } from '../../core/project/project.model';
 
 @Component({
   selector: 'app-navbar',
@@ -16,13 +18,18 @@ import { SettingsService } from '../../core/settings/settings.service';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private navbarControll: NavbarControllService, private settings: SettingsService, private router: Router) { }
+  constructor(private navbarControll: NavbarControllService, private projectsService: ProjectsService ,private settings: SettingsService, private router: Router) { }
 
   items: MenuItem[] | undefined;
+  project: Project = {} as Project;
 
   ngOnInit() {
     document.addEventListener('contextmenu', function (event) {
       event.preventDefault();
+    });
+
+    this.projectsService.currentProject$.subscribe((project) => {
+      this.project = project;
     });
 
     this.settings.getSettingsFromFile();
@@ -51,7 +58,7 @@ export class NavbarComponent implements OnInit {
             label: 'Change',
             icon: PrimeIcons.PENCIL,
             command: () => {
-              this.router.navigate(['/create']);
+              this.router.navigate(['/change', this.project.name]);
             }
           }
         ],

@@ -39,6 +39,15 @@
                 <input type="number" pInputText class="w-16" [(ngModel)]="matrix[2][2]" placeholder="0" [ngModelOptions]="{standalone: true}"/>
             </div>
         </div>
+        <div *ngIf="selectedMethod == 'matrix'" class="flex items-center gap-4 mb-4">
+            <label class="font-semibold w-36">Vector</label>
+            <div class="flex flex-col gap-2">
+                <input type="number" pInputText class="w-32" [(ngModel)]="vector[0]" placeholder="x" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-32" [(ngModel)]="vector[1]" placeholder="y" [ngModelOptions]="{standalone: true}"/>
+                <input type="number" pInputText class="w-32" [(ngModel)]="vector[2]" placeholder="z" [ngModelOptions]="{standalone: true}"/>
+            </div>
+
+        </div>
         <ng-template #footer>
             <button pButton type="button" label="Calculate" class="w-full mt-4 " (click)="calculate()"></button>
         </ng-template>
