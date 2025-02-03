@@ -53,8 +53,20 @@ export class NavbarComponent implements OnInit {
             command: () => {
               this.router.navigate(['/create']);
             }
-          },
-          {
+          }
+        ],
+      },
+      {
+        label: 'Simulation',
+        icon: PrimeIcons.PLAY,
+        command: () => {
+          this.router.navigate(['/simulation']);
+        }
+      }
+    ];
+  }
+
+  /**          {
             label: 'Upload',
             icon: PrimeIcons.UPLOAD,
           },
@@ -71,17 +83,7 @@ export class NavbarComponent implements OnInit {
             label: 'Reload',
             icon: PrimeIcons.REFRESH,
           }
-        ],
-      },
-      {
-        label: 'Simulation',
-        icon: PrimeIcons.PLAY,
-        command: () => {
-          this.router.navigate(['/simulation']);
-        }
-      }
-    ];
-  }
+             */
 
   showSettings() {
     this.navbarControll.setCurrentValue(true);

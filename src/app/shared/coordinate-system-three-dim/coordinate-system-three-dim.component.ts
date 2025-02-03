@@ -41,27 +41,14 @@ export class CoordinateSystemThreeDimComponent implements OnInit {
     let elementName = this.type.toLowerCase();
     const div = document.getElementById(elementName);
     if (div) {
-      // Remove scaling factors from the matrix
-      this.matrix[0][0] = 1;
-      this.matrix[1][1] = 1;
-      this.matrix[2][2] = 1;
-
-      // Get the first 16 values of the matrix and convert them to a string
-      const matrixString = this.matrix.flat().slice(0, 16).join(',');
+      let translateY = 210 + this.matrix[1][3];
+      let translateZ = -105 + this.matrix[2][3];
+      let translateX = 200 + this.matrix[0][3];
 
       if (this.type == 'Sphere') {
-        let translateY = 420 - this.matrix[1][3];
-        let translateZ = -200 + this.matrix[2][3];
-        div.style.transform = `translateX(${this.matrix[0][3]}px) translateY(${translateY}px) translateZ(${translateZ}px)`;
+        div.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px)`;
       } else {
-        let translateY = 420 - this.matrix[0][3];
-        let translateZ = this.matrix[1][3];
-        if(this.type == 'Cube') {
-          translateZ = -210 + translateZ;
-        } else {
-          translateZ = -200 + translateZ;
-        }
-        div.style.transform = `rotateX(${this.matrix[1][2]}rad) rotateY(${this.matrix[2][1]}rad) rotateZ(${this.matrix[0][2]}rad) translateX(${this.matrix[0][3]}px) translateY(${translateY}px) translateZ(${translateZ}px)`;
+        div.style.transform = `rotateX(${this.matrix[1][2]}rad) rotateY(${this.matrix[2][1]}rad) rotateZ(${this.matrix[0][2]}rad) translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px)`;
         console.log(div.style.transform);
       }
     }
