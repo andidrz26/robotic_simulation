@@ -66,7 +66,7 @@
     height: 80px;
     position: relative;
     transform-style: preserve-3d;
-    transform: translateZ(-40px);
+    transform: translateY(420px) translateZ(-210px);
 }
 
 .small-cube__face {
@@ -109,7 +109,7 @@
     background: grey;
     position: relative;
     transform-style: preserve-3d;
-    transform: translateZ(-40px);
+    transform: translateY(420px) translateZ(-210px);
     background-color: rgba(0, 128, 0, 0.5);
 }
 
@@ -118,6 +118,7 @@
     width: 100px;
     height: 100px;
     transform-style: preserve-3d;
+    transform: translateY(420px) translateZ(-200px);
 }
 
 .one {

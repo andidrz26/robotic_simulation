@@ -50,9 +50,9 @@ export class CommandInputComponent implements OnInit {
         this.projectService.setMatrix(this.matrix);
         break;
       case 'quaternion':
-        let x = this.quaternionInput[0];
-        let y = this.quaternionInput[1];
-        let z = this.quaternionInput[2];
+        let x = this.quaternionInput[1];
+        let y = this.quaternionInput[2];
+        let z = this.quaternionInput[3];
         this.quaternion = await this.quaternionService.newQuaternion(this.quaternionInput);
         this.quaternion = await this.quaternionService.slerpQuaternions(this.quaternion, 1);
         this.projectService.setQuaternion(this.quaternion);

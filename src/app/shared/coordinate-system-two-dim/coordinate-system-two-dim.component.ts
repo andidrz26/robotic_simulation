@@ -34,7 +34,7 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
     });
     this.projectsService.currentMatrix$.subscribe((matrix) => {
       this.matrix = matrix;
-      if(!first) {
+      if (!first) {
         this.update2DObject();
       } else {
         first = false;
@@ -51,26 +51,17 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
   update2DObject(): void {
     const div = document.getElementById('spinDiv');
     if (div) {
-      let twoDMatrix: number[][];
-      if (this.matrix.length == 3) {
-        twoDMatrix = [
-          [this.matrix[0][0], this.matrix[0][1]],
-          [this.matrix[1][0], this.matrix[1][1]],
-          [this.matrix[2][0], this.matrix[2][1]]
-        ];
-      } else {
-        twoDMatrix = [
-          [this.matrix[0][0], this.matrix[0][1]],
-          [this.matrix[1][0], this.matrix[1][1]],
-          [this.matrix[0][3], this.matrix[1][3]]
-        ];
-      }
-      // Ensure the scaling is not changing by setting the scale values to 1
-      twoDMatrix[0][0] = 1; // scaleX
-      twoDMatrix[1][1] = 1; // scaleY
 
-      const matrixString = twoDMatrix.join(',');
-      div.style.transform = `matrix(${matrixString})`;
+      let translateX: number = this.matrix[0][2];
+      let translateY: number = this.matrix[1][2];
+      if (this.matrix.length > 3) {
+        translateX = this.matrix[0][3];
+        translateY = this.matrix[1][3];
+      }
+      console.log(this.matrix);
+
+      const rotateAngle = Math.atan2(this.matrix[1][0], this.matrix[0][0]) * (180 / Math.PI);
+      div.style.transform = `translate(${translateX}px, ${translateY}px) rotate(${rotateAngle}deg)`;
     }
   }
 } 
