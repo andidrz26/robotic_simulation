@@ -19,6 +19,13 @@ export class CoordinateSystemThreeDimComponent implements OnInit {
   selectedProject: Project = {} as Project;
 
   ngOnInit(): void {
+    this.projectsService.setQuaternion({
+      scalar: 0,
+      vector_x: 0,
+      vector_y: 0,
+      vector_z: 0,
+    });
+    this.projectsService.setMatrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]);
     let first: boolean = true;
     this.projectsService.currentMatrix$.subscribe((matrix) => {
       this.matrix = matrix;

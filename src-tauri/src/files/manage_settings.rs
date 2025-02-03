@@ -18,17 +18,17 @@ pub struct Settings {
 
 impl Settings {
     pub fn save(&self) -> io::Result<()> {
-        let save_dir = std::path::Path::new("../saveFiles");
+        let save_dir = std::path::Path::new("/Users/andip/Desktop/Sim/saveFiles");
         if !save_dir.exists() {
             std::fs::create_dir_all(save_dir)?;
         }
-        let mut file = File::create("../saveFiles/settings.json")?;
+        let mut file = File::create("/Users/andip/Desktop/Sim/saveFiles/settings.json")?;
         file.write_all(&to_string(&self)?.into_bytes())?;
         Ok(())
     }
 
     pub fn load() -> io::Result<Settings> {
-        let mut file = File::open("../saveFiles/settings.json")?;
+        let mut file = File::open("/Users/andip/Desktop/Sim/saveFiles/settings.json")?;
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer)?;
         let settings: Settings = serde_json::from_slice(&buffer)?;

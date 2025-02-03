@@ -26,6 +26,13 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
 
   ngOnInit(): void {
     let first: boolean = true;
+    this.projectsService.setQuaternion({
+      scalar: 0,
+      vector_x: 0,
+      vector_y: 0,
+      vector_z: 0,
+    });
+    this.projectsService.setMatrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]);
     this.projectsService.currentProject$.subscribe((project) => {
       if (project.object != undefined) {
         this.selectedProject = project;
