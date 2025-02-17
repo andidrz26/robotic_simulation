@@ -8,15 +8,15 @@ import { ProjectsService } from '../project/projects.service';
 })
 export class EulerService {
 
-  async newEuler(inputVector: number[]): Promise<EulerAngles> {
-    return await invoke<EulerAngles>("get_new_euler", { vector: inputVector });
+  newEuler(inputVector: number[]): Promise<EulerAngles> {
+    return invoke<EulerAngles>("get_new_euler", { vector: inputVector });
   }
 
-  async fromRotationMatrix(rotationMatrix: number[][]): Promise<EulerAngles> {
-    return await invoke<EulerAngles>("get_euler_from_rotation_matrix", { matrix: rotationMatrix });
+  fromRotationMatrix(rotationMatrix: number[][]): Promise<EulerAngles> {
+    return invoke<EulerAngles>("get_euler_from_rotation_matrix", { matrix: rotationMatrix });
   }
 
-  async toRotationMatrix(eulerAngles: EulerAngles): Promise<number[][]> {
-    return await invoke<[]>("get_rotation_matrix_from_euler", { vector: eulerAngles });
+  toRotationMatrix(eulerAngles: EulerAngles): Promise<number[][]> {
+    return invoke<[]>("get_rotation_matrix_from_euler", { vector: eulerAngles });
   }
 }

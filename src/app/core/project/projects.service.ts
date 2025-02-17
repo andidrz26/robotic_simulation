@@ -29,7 +29,7 @@ export class ProjectsService {
   private currentProjectSubject: BehaviorSubject<Project> = new BehaviorSubject<Project>({} as Project);
   public currentProject$: Observable<Project> = this.currentProjectSubject.asObservable();
 
-  private currentMatrixSubject: BehaviorSubject<number[][]> = new BehaviorSubject<number[][]>([[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
+  private currentMatrixSubject: BehaviorSubject<number[][]> = new BehaviorSubject<number[][]>([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]);
   public currentMatrix$: Observable<number[][]> = this.currentMatrixSubject.asObservable();
 
   private currentQuaternionSubject: BehaviorSubject<Quaternion> = new BehaviorSubject<Quaternion>({
@@ -77,6 +77,7 @@ export class ProjectsService {
 
   setMatrix(matrix: number[][]): void {
     this.currentMatrixSubject.next(matrix);
+    console.log('Matrix set:', matrix);
   }
 
   setQuaternion(quaternion: Quaternion): void {

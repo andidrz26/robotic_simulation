@@ -23,6 +23,7 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
   matrix: number[][] = [];
   quaternion: Quaternion = {} as Quaternion;
   eulerAngles: EulerAngles = {} as EulerAngles;
+  div: HTMLElement | null = null;
 
   ngOnInit(): void {
     let first: boolean = true;
@@ -32,11 +33,35 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
       vector_y: 0,
       vector_z: 0,
     });
-    this.projectsService.setMatrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]]);
     this.projectsService.currentProject$.subscribe((project) => {
       if (project.object != undefined) {
+        this.div = document.getElementById('spinDiv');
         this.selectedProject = project;
         this.type = project.object.types;
+        if (this.div) {
+          if (this.type == 'Cube' || this.type == 'Sphere') {
+            if (this.div) {
+              this.div.style.width = this.selectedProject.object.width + 'px';
+              this.div.style.height = this.selectedProject.object.height + 'px';
+            } else {
+              console.error('Div could not be set');
+            }
+          } else if (this.type == 'Pyramid') {
+            if (this.div) {
+              this.div.style.width = '0px';
+              this.div.style.height = '0px';
+              this.div.style.borderLeft = (this.selectedProject.object.width / 2) + 'px solid transparent';
+              this.div.style.borderRight = (this.selectedProject.object.width / 2) + 'px solid transparent';
+              this.div.style.borderBottom = this.selectedProject.object.height + 'px solid rgba(0, 128, 0, 0.5)';
+            } else {
+              console.error('Div could not be set');
+            }
+          } else {
+            console.error('Invalid object type');
+          }
+          this.div.style.top = `calc(50% - ${this.selectedProject.object.height / 2}px)`;
+          this.div.style.left = `calc(50% - ${this.selectedProject.object.width / 2}px)`;
+        }
       }
     });
     this.projectsService.currentMatrix$.subscribe((matrix) => {
@@ -56,8 +81,7 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
   }
 
   update2DObject(): void {
-    const div = document.getElementById('spinDiv');
-    if (div) {
+    if (this.div) {
 
       let translateX: number = this.matrix[0][2];
       let translateY: number = this.matrix[1][2];
@@ -65,10 +89,12 @@ export class CoordinateSystemTwoDimComponent implements OnInit {
         translateX = this.matrix[0][3];
         translateY = this.matrix[1][3];
       }
-      console.log(this.matrix);
-
-      const rotateAngle = Math.atan2(this.matrix[1][0], this.matrix[0][0]) * (180 / Math.PI);
-      div.style.transform = `translate(${translateX}px, ${translateY}px) rotate(${rotateAngle}deg)`;
+      translateY = -translateY;
+      let rotateAngle = Math.atan2(this.matrix[1][0], this.matrix[0][0]) * (180 / Math.PI);  
+      if(translateY > 0) {
+        rotateAngle = rotateAngle + 180;
+      }
+      this.div.style.transform = `translate(${translateX}px, ${translateY}px) rotate(${rotateAngle}deg)`;
     }
   }
 } 

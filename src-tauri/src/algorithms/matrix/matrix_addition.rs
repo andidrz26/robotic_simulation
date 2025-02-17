@@ -12,6 +12,7 @@ pub fn sum_of(first_summand: Vec<Vec<f64>>, second_summand: Vec<Vec<f64>>) -> Re
                 sum[i].push(first_summand[i][j] + second_summand[i][j]);
             }
         }
+        println!("{:?}", sum);
         Ok(sum)
     } else {
         Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "Matrix dimensions do not match"))

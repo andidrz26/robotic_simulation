@@ -9,26 +9,24 @@ export class MatrixService implements OnInit{
 
   constructor(private projectService: ProjectsService) { }
 
-  matrix: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  matrix: number[][] = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
 
   ngOnInit(): void {
     this.projectService.currentMatrix$.subscribe((matrix) => {
       this.matrix = matrix;
+      console.log(this.matrix);
     });
   }
 
-  async multiplyMatrices(matrix: number[][]): Promise<number[][]> {
-    this.matrix = await invoke<[]>("get_multiplied_matrix", { first_factor: this.matrix, second_factor: matrix });
-    return this.matrix;
+  multiplyMatrices(matrix: number[][]): Promise<number[][]> {
+    return invoke<[]>("get_multiplied_matrix", { first_factor: this.matrix, second_factor: matrix });
   }
 
-  async addMatrices(matrix: number[][]): Promise<number[][]> {
-    this.matrix = await invoke<[]>("get_added_matrix", { first_summand: this.matrix, second_summand: matrix });
-    return this.matrix;
+  addMatrices(matrix: number[][]): Promise<number[][]> {
+    return invoke<[]>("get_added_matrix", { first_summand: this.matrix, second_summand: matrix });
   }
 
-  async transposeMatrix(matrix: number[][]): Promise<number[][]> {
-    this.matrix = await invoke<[]>("get_transposed_matrix", { matrix: matrix });
-    return this.matrix;
+  transposeMatrix(matrix: number[][]): Promise<number[][]> {
+    return invoke<[]>("get_transposed_matrix", { matrix: matrix });
   }
 }
