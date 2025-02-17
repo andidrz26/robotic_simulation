@@ -1,6 +1,6 @@
 # robotic_simulation
-Author: Andre Dreitz
-Video: VC
+Author: Andre Dreitz \
+Video: VC \
 Description: An application written in Rust and Typescript supporting the creation of 2D or 3D objects and controlling their movements based on coordinate transformations.
 
 ## Important settings
